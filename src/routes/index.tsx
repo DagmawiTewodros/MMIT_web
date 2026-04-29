@@ -232,9 +232,9 @@ function Index() {
           </div>
 
           <div className="md:col-span-6 grid grid-cols-2 gap-4">
-            <img src={consulting} alt="" loading="lazy" width={1280} height={896}
+            <img src={approachA} alt="" loading="lazy" width={1280} height={960}
               className="rounded-2xl aspect-[3/4] object-cover w-full" />
-            <img src={training} alt="" loading="lazy" width={1280} height={896}
+            <img src={approachB} alt="" loading="lazy" width={300} height={250}
               className="rounded-2xl aspect-[3/4] object-cover w-full mt-12" />
           </div>
         </div>
