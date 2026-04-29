@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
+import { z } from "zod";
 import { SiteShell } from "@/components/site/SiteShell";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -18,8 +21,56 @@ export const Route = createFileRoute("/contact")({
   }),
 });
 
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Please enter your name").max(120),
+  email: z.string().trim().email("Please enter a valid email address").max(255),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  organization: z.string().trim().max(160).optional().or(z.literal("")),
+  message: z
+    .string()
+    .trim()
+    .min(5, "Please share a little more so we can help")
+    .max(2000, "Please keep your message under 2000 characters"),
+});
+
 function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const parsed = contactSchema.safeParse({
+      name: fd.get("name") ?? "",
+      email: fd.get("email") ?? "",
+      phone: fd.get("phone") ?? "",
+      organization: fd.get("organization") ?? "",
+      message: fd.get("message") ?? "",
+    });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Please check the form");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("contact_submissions").insert({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone || null,
+        organization: parsed.data.organization || null,
+        message: parsed.data.message,
+      });
+      if (error) throw error;
+      setSubmitted(true);
+      e.currentTarget.reset();
+      toast.success("Message sent");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Could not send your message";
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SiteShell>
@@ -76,35 +127,39 @@ function ContactPage() {
 
           <div className="md:col-span-7">
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitted(true);
-              }}
+              onSubmit={handleSubmit}
               className="bg-card border border-border rounded-2xl p-8 md:p-10 space-y-6"
             >
               <div className="grid sm:grid-cols-2 gap-6">
-                <Field label="Full name" name="name" required />
-                <Field label="Organization" name="org" />
+                <Field label="Full name" name="name" required maxLength={120} />
+                <Field label="Organization" name="organization" maxLength={160} />
               </div>
               <div className="grid sm:grid-cols-2 gap-6">
-                <Field label="Email" name="email" type="email" required />
-                <Field label="Phone" name="phone" />
+                <Field label="Email" name="email" type="email" required maxLength={255} />
+                <Field label="Phone" name="phone" maxLength={40} />
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2"
+                >
                   How can we help?
                 </label>
                 <textarea
+                  id="message"
+                  name="message"
                   required
                   rows={5}
+                  maxLength={2000}
                   className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
                 />
               </div>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-3.5 text-sm font-medium hover:bg-primary/90 transition"
+                disabled={loading}
+                className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-3.5 text-sm font-medium hover:bg-primary/90 transition disabled:opacity-60"
               >
-                Send message
+                {loading ? "Sending…" : "Send message"}
               </button>
               {submitted && (
                 <div className="text-sm text-accent-foreground bg-accent/20 border border-accent/30 rounded-md px-4 py-3">
@@ -124,15 +179,20 @@ function Field({
   name,
   type = "text",
   required,
+  maxLength,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  maxLength?: number;
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+      <label
+        htmlFor={name}
+        className="block text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2"
+      >
         {label}
       </label>
       <input
@@ -140,6 +200,7 @@ function Field({
         name={name}
         type={type}
         required={required}
+        maxLength={maxLength}
         className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
       />
     </div>
