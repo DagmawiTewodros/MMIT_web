@@ -33,6 +33,9 @@ function AdminMessagesPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread" | "read">("all");
   const [search, setSearch] = useState("");
+  const [searchField, setSearchField] = useState<"all" | "name" | "email">("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [selected, setSelected] = useState<Submission | null>(null);
 
   // Redirect if not authenticated
