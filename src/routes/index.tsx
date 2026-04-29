@@ -1,26 +1,255 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
+import { SiteShell } from "@/components/site/SiteShell";
+import hero from "@/assets/hero.jpg";
+import consulting from "@/assets/consulting.jpg";
+import training from "@/assets/training.jpg";
+import research from "@/assets/research.jpg";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "MATED Institute — Strategic Consulting & Training, Addis Ababa" },
+      {
+        name: "description",
+        content:
+          "We partner with public and private organizations to deliver strategy, finance, audit, taxation, IT and capacity-development services across Ethiopia.",
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
+};
 
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <SiteShell>
+      {/* HERO */}
+      <section className="relative pt-28 md:pt-36 pb-20 md:pb-32 overflow-hidden">
+        <div className="container-editorial grid md:grid-cols-12 gap-12 items-end">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={fadeUp}
+            className="md:col-span-7"
+          >
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground mb-8">
+              <span className="h-px w-8 bg-accent" />
+              Consulting · Training · Research
+            </div>
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-balance">
+              Strategy that<br />
+              <em className="not-italic text-accent">moves</em> institutions<br />
+              forward.
+            </h1>
+            <p className="mt-8 max-w-xl text-lg text-muted-foreground leading-relaxed">
+              MATED is an Addis Ababa–based management institute delivering rigorous
+              consulting, research and capacity development for the organizations
+              shaping Ethiopia's economy.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                to="/services"
+                className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-7 py-3.5 text-sm font-medium hover:bg-primary/90 transition"
+              >
+                Explore our services <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3.5 text-sm font-medium hover:bg-muted transition"
+              >
+                Who we are
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="md:col-span-5 relative"
+          >
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
+              <img
+                src={hero}
+                alt="MATED Institute consultant"
+                className="h-full w-full object-cover"
+                width={1536}
+                height={1024}
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
+            </div>
+            <div className="absolute -left-8 -bottom-8 hidden md:block bg-card border border-border rounded-xl p-5 shadow-sm w-56">
+              <div className="font-display text-3xl">15+</div>
+              <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
+                Years advising leaders
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* MARQUEE / CREDIBILITY STRIP */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="container-editorial py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            ["500+", "Professionals trained"],
+            ["120+", "Engagements delivered"],
+            ["40+", "Public & private partners"],
+            ["15+", "Years of practice"],
+          ].map(([n, l]) => (
+            <div key={l}>
+              <div className="font-display text-4xl md:text-5xl text-primary">{n}</div>
+              <div className="text-xs uppercase tracking-[0.15em] text-muted-foreground mt-2">
+                {l}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section className="py-24 md:py-32">
+        <div className="container-editorial">
+          <div className="grid md:grid-cols-12 gap-8 mb-16">
+            <div className="md:col-span-4">
+              <div className="text-xs uppercase tracking-[0.2em] text-accent font-medium">
+                What we do
+              </div>
+            </div>
+            <h2 className="md:col-span-8 font-display text-4xl md:text-6xl leading-tight text-balance">
+              Three practices, one principle: deliver value worth measuring.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Compass,
+                title: "Consultancy",
+                img: consulting,
+                desc: "Strategy, finance, auditing, taxation and IT advisory for organizations navigating complex change.",
+                to: "/services" as const,
+              },
+              {
+                icon: GraduationCap,
+                title: "Training",
+                img: training,
+                desc: "Tailored capacity-development programs for individuals, SMEs, government and non-governmental institutions.",
+                to: "/services" as const,
+              },
+              {
+                icon: LineChart,
+                title: "Research",
+                img: research,
+                desc: "Applied management research and policy studies that translate evidence into practical decisions.",
+                to: "/services" as const,
+              },
+            ].map(({ icon: Icon, title, img, desc, to }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="group rounded-2xl overflow-hidden bg-card border border-border hover:border-primary/40 transition-all"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={img}
+                    alt={title}
+                    loading="lazy"
+                    width={1280}
+                    height={896}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-7">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-9 w-9 rounded-md bg-accent/15 text-accent grid place-items-center">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <h3 className="font-display text-2xl">{title}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                  <Link
+                    to={to}
+                    className="inline-flex items-center gap-1 mt-5 text-sm font-medium text-primary hover:text-accent transition"
+                  >
+                    Learn more <ArrowUpRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* APPROACH */}
+      <section className="py-24 md:py-32 bg-secondary/40 border-y border-border">
+        <div className="container-editorial grid md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-6">
+            <div className="text-xs uppercase tracking-[0.2em] text-accent font-medium mb-6">
+              Our approach
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl leading-tight text-balance">
+              We work alongside leaders — not above them.
+            </h2>
+            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+              Every engagement begins with listening. We combine deep functional
+              expertise with on-the-ground knowledge of Ethiopian institutions to
+              produce recommendations that get implemented, not shelved.
+            </p>
+
+            <ul className="mt-10 space-y-5">
+              {[
+                ["Evidence-led", "Decisions grounded in rigorous analysis and research."],
+                ["Locally rooted", "Deep familiarity with the Ethiopian regulatory and business landscape."],
+                ["Built to last", "We transfer knowledge so capability stays with your team."],
+              ].map(([h, d]) => (
+                <li key={h} className="flex gap-4">
+                  <div className="mt-2 h-1.5 w-1.5 rounded-full bg-accent shrink-0" />
+                  <div>
+                    <div className="font-medium">{h}</div>
+                    <div className="text-sm text-muted-foreground">{d}</div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="md:col-span-6 grid grid-cols-2 gap-4">
+            <img src={consulting} alt="" loading="lazy" width={1280} height={896}
+              className="rounded-2xl aspect-[3/4] object-cover w-full" />
+            <img src={training} alt="" loading="lazy" width={1280} height={896}
+              className="rounded-2xl aspect-[3/4] object-cover w-full mt-12" />
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 md:py-32">
+        <div className="container-editorial">
+          <div className="rounded-3xl bg-primary text-primary-foreground p-10 md:p-20 grid md:grid-cols-12 gap-10 items-end">
+            <h2 className="md:col-span-8 font-display text-4xl md:text-6xl leading-tight text-balance">
+              Have a challenge worth solving? Let's talk.
+            </h2>
+            <div className="md:col-span-4 md:text-right">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-7 py-4 text-sm font-medium hover:opacity-90 transition"
+              >
+                Start a conversation <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </SiteShell>
+  );
 }
