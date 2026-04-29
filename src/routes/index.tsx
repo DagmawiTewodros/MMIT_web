@@ -2,10 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
-import hero from "@/assets/hero.jpg";
-import consulting from "@/assets/consulting.jpg";
-import training from "@/assets/training.jpg";
-import research from "@/assets/research.jpg";
+import hero from "@/assets/mated/hero.jpg";
+import consulting from "@/assets/mated/consulting-1.jpg";
+import training from "@/assets/mated/training-1.jpg";
+import research from "@/assets/mated/consulting-3.jpg";
+import partnerChamber from "@/assets/mated/partner-chamber.jpg";
+import partnerAirports from "@/assets/mated/partner-airports.jpg";
+import partnerElili from "@/assets/mated/partner-elili.jpg";
+import partnerFamily from "@/assets/mated/partner-family.jpg";
+import partnerTirett from "@/assets/mated/partner-tirett.jpg";
+import partnerPulp from "@/assets/mated/partner-pulp.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
