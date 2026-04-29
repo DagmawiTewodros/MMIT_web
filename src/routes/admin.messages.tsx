@@ -238,14 +238,63 @@ function AdminMessagesPage() {
           </div>
         </div>
 
-        <div className="relative mb-6 max-w-md">
-          <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, email, organization, message…"
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
-          />
+        <div className="mb-6 flex flex-col md:flex-row gap-3 md:items-center flex-wrap">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={
+                searchField === "name"
+                  ? "Search by name…"
+                  : searchField === "email"
+                    ? "Search by email…"
+                    : "Search name, email, organization, message…"
+              }
+              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
+            />
+          </div>
+
+          <select
+            value={searchField}
+            onChange={(e) => setSearchField(e.target.value as "all" | "name" | "email")}
+            className="px-3 py-2.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
+            aria-label="Search field"
+          >
+            <option value="all">All fields</option>
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+          </select>
+
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-muted-foreground">From</label>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
+            />
+            <label className="text-xs text-muted-foreground">To</label>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
+            />
+            {(search || dateFrom || dateTo || searchField !== "all") && (
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setSearchField("all");
+                  setDateFrom("");
+                  setDateTo("");
+                }}
+                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-6">
