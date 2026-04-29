@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
-import consulting from "@/assets/consulting.jpg";
-import training from "@/assets/training.jpg";
-import research from "@/assets/research.jpg";
+import consulting from "@/assets/mated/consulting-1.jpg";
+import training from "@/assets/mated/training-1.jpg";
+import research from "@/assets/mated/consulting-3.jpg";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
