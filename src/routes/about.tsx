@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { SiteShell } from "@/components/site/SiteShell";
-import hero from "@/assets/hero.jpg";
-import consulting from "@/assets/consulting.jpg";
+import hero from "@/assets/mated/hero.jpg";
+import consulting from "@/assets/mated/team.jpg";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,

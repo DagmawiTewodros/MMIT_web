@@ -2,10 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
-import hero from "@/assets/hero.jpg";
-import consulting from "@/assets/consulting.jpg";
-import training from "@/assets/training.jpg";
-import research from "@/assets/research.jpg";
+import hero from "@/assets/mated/training-2.jpg";
+import consulting from "@/assets/mated/consulting-1.jpg";
+import training from "@/assets/mated/training-1.jpg";
+import research from "@/assets/mated/consulting-3.jpg";
+import approachA from "@/assets/mated/consulting-2.jpg";
+import approachB from "@/assets/mated/team.jpg";
+import partnerChamber from "@/assets/mated/partner-chamber.jpg";
+import partnerAirports from "@/assets/mated/partner-airports.jpg";
+import partnerElili from "@/assets/mated/partner-elili.jpg";
+import partnerFamily from "@/assets/mated/partner-family.jpg";
+import partnerTirett from "@/assets/mated/partner-tirett.jpg";
+import partnerPulp from "@/assets/mated/partner-pulp.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -79,8 +87,8 @@ function Index() {
                 src={hero}
                 alt="MATED Institute consultant"
                 className="h-full w-full object-cover"
-                width={1536}
-                height={1024}
+                width={960}
+                height={1280}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
             </div>
@@ -224,10 +232,38 @@ function Index() {
           </div>
 
           <div className="md:col-span-6 grid grid-cols-2 gap-4">
-            <img src={consulting} alt="" loading="lazy" width={1280} height={896}
+            <img src={approachA} alt="" loading="lazy" width={1280} height={960}
               className="rounded-2xl aspect-[3/4] object-cover w-full" />
-            <img src={training} alt="" loading="lazy" width={1280} height={896}
+            <img src={approachB} alt="" loading="lazy" width={300} height={250}
               className="rounded-2xl aspect-[3/4] object-cover w-full mt-12" />
+          </div>
+        </div>
+      </section>
+
+      {/* PARTNERS */}
+      <section className="py-20 md:py-24 border-b border-border">
+        <div className="container-editorial">
+          <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground text-center mb-10">
+            Trusted by leading Ethiopian institutions
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-8 md:gap-12 items-center">
+            {[
+              [partnerChamber, "Addis Ababa Chamber of Commerce"],
+              [partnerAirports, "Ethiopian Airports Enterprise"],
+              [partnerElili, "Elili Hotel"],
+              [partnerFamily, "Ethiopian Family"],
+              [partnerTirett, "Tirett"],
+              [partnerPulp, "Ethiopian Paper and Pulp"],
+            ].map(([src, alt]) => (
+              <div key={alt} className="flex items-center justify-center">
+                <img
+                  src={src}
+                  alt={alt}
+                  loading="lazy"
+                  className="max-h-16 w-auto object-contain opacity-70 hover:opacity-100 transition grayscale hover:grayscale-0"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
