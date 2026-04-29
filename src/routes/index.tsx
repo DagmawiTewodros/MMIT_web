@@ -87,8 +87,8 @@ function Index() {
                 src={hero}
                 alt="MATED Institute consultant"
                 className="h-full w-full object-cover"
-                width={1536}
-                height={1024}
+                width={960}
+                height={1280}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
             </div>
