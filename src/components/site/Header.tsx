@@ -30,14 +30,12 @@ export function Header() {
       }`}
     >
       <div className="container-editorial flex h-16 md:h-20 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="h-9 w-9 rounded-md bg-primary text-primary-foreground grid place-items-center font-display text-lg">
-            M
-          </div>
+        <Link to="/" className="flex items-center gap-3 group">
+          <img src={logo} alt="MATED Institute" className="h-10 w-10 object-contain" width={40} height={40} />
           <div className="leading-tight">
-            <div className="font-display text-lg tracking-tight">MATED</div>
+            <div className="font-display text-base font-bold tracking-tight">MATED</div>
             <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Institute
+              Consulting & Training
             </div>
           </div>
         </Link>
