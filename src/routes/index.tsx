@@ -107,14 +107,33 @@ function Index() {
             className="md:col-span-5 relative"
           >
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
-              <img
-                src={hero}
-                alt="MATED Institute consultant"
-                className="h-full w-full object-cover"
-                width={960}
-                height={1280}
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
+              <AnimatePresence mode="sync">
+                <motion.img
+                  key={slide}
+                  src={heroSlides[slide].src}
+                  alt={heroSlides[slide].alt}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  width={960}
+                  height={1280}
+                />
+              </AnimatePresence>
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {heroSlides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSlide(i)}
+                    aria-label={`Show slide ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === slide ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
             <div className="absolute -left-8 -bottom-8 hidden md:block bg-card border border-border rounded-xl p-5 shadow-sm w-56">
               <div className="font-display text-3xl">15+</div>
