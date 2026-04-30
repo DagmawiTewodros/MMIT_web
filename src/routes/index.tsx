@@ -40,8 +40,25 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
+const heroSlides = [
+  { src: heroA, alt: "MATED training session" },
+  { src: heroB, alt: "MATED capacity development" },
+  { src: heroC, alt: "MATED consulting engagement" },
+  { src: heroD, alt: "MATED advisory work" },
+  { src: heroE, alt: "MATED strategy session" },
+  { src: heroF, alt: "MATED team" },
+];
+
 function Index() {
-  return (
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % heroSlides.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
     <SiteShell>
       {/* HERO */}
       <section className="relative pt-28 md:pt-36 pb-20 md:pb-32 overflow-hidden">
