@@ -59,6 +59,7 @@ function Index() {
     return () => clearInterval(id);
   }, []);
 
+  return (
     <SiteShell>
       {/* HERO */}
       <section className="relative pt-28 md:pt-36 pb-20 md:pb-32 overflow-hidden">
