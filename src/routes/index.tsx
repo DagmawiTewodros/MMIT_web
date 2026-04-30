@@ -1,8 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/site/SiteShell";
-import hero from "@/assets/mated/training-2.jpg";
+import heroA from "@/assets/mated/training-2.jpg";
+import heroB from "@/assets/mated/training-1.jpg";
+import heroC from "@/assets/mated/consulting-1.jpg";
+import heroD from "@/assets/mated/consulting-2.jpg";
+import heroE from "@/assets/mated/consulting-3.jpg";
+import heroF from "@/assets/mated/team.jpg";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
 import research from "@/assets/mated/consulting-3.jpg";
