@@ -1,8 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/site/SiteShell";
-import hero from "@/assets/mated/training-2.jpg";
+import heroA from "@/assets/mated/training-2.jpg";
+import heroB from "@/assets/mated/training-1.jpg";
+import heroC from "@/assets/mated/consulting-1.jpg";
+import heroD from "@/assets/mated/consulting-2.jpg";
+import heroE from "@/assets/mated/consulting-3.jpg";
+import heroF from "@/assets/mated/team.jpg";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
 import research from "@/assets/mated/consulting-3.jpg";
@@ -34,7 +40,25 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
+const heroSlides = [
+  { src: heroA, alt: "MATED training session" },
+  { src: heroB, alt: "MATED capacity development" },
+  { src: heroC, alt: "MATED consulting engagement" },
+  { src: heroD, alt: "MATED advisory work" },
+  { src: heroE, alt: "MATED strategy session" },
+  { src: heroF, alt: "MATED team" },
+];
+
 function Index() {
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % heroSlides.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <SiteShell>
       {/* HERO */}
@@ -83,14 +107,33 @@ function Index() {
             className="md:col-span-5 relative"
           >
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
-              <img
-                src={hero}
-                alt="MATED Institute consultant"
-                className="h-full w-full object-cover"
-                width={960}
-                height={1280}
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
+              <AnimatePresence mode="sync">
+                <motion.img
+                  key={slide}
+                  src={heroSlides[slide].src}
+                  alt={heroSlides[slide].alt}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  width={960}
+                  height={1280}
+                />
+              </AnimatePresence>
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {heroSlides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSlide(i)}
+                    aria-label={`Show slide ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === slide ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
             <div className="absolute -left-8 -bottom-8 hidden md:block bg-card border border-border rounded-xl p-5 shadow-sm w-56">
               <div className="font-display text-3xl">15+</div>
