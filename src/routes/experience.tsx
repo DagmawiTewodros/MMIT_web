@@ -38,37 +38,37 @@ const experiences = [
     Icon: BarChart2,
     title: "IFRS for SMEs consultancy Services",
     desc: "Specialized International Financial Reporting Standards implementation for small and medium enterprises. Our experts guide you through seamless transition to IFRS compliance, ensuring accurate financial reporting and enhanced stakeholder confidence.",
-    link: "/ifrs-for-smes-consultancy-services/",
+    link: "/experience/ifrs-for-smes",
   },
   {
     Icon: Monitor,
     title: "Training- IFRS, IPSAS, Asset Valuation & Others",
     desc: "Comprehensive professional training programs designed to build expertise in financial reporting standards. Our hands-on workshops and certification courses empower finance professionals with practical skills and industry knowledge.",
-    link: "/training-ifrs-ipsas-asset-valuation-others/",
+    link: "/experience/training",
   },
   {
     Icon: TrendingUp,
     title: "IPSAS Consultancy Services",
     desc: "Expert International Public Sector Accounting Standards implementation for government entities and public sector organizations. We ensure compliance, improve transparency, and enhance public financial management through our specialized consultancy services.",
-    link: "/ipsas-consultancy-services/",
+    link: "/experience/ipsas",
   },
   {
     Icon: PieChart,
     title: "Consultancy Services Offered",
     desc: "Strategic business advisory services covering financial management, operational efficiency, and organizational development. Our tailored solutions address unique challenges and drive sustainable growth for your organization.",
-    link: "/consultancy-services-offered/",
+    link: "/experience/consultancy-services",
   },
   {
     Icon: ThumbsUp,
     title: "Asset Valuation & Revaluation Consultancy Services",
     desc: "Professional asset valuation services providing accurate assessment of tangible and intangible assets. Our certified experts deliver reliable valuations for financial reporting, mergers & acquisitions, and strategic decision-making.",
-    link: "/asset-valuation-revaluation-consultancy-services/",
+    link: "/experience/asset-valuation",
   },
   {
     Icon: Smartphone,
     title: "More",
     desc: "Discover our full range of specialized consulting and training services. From risk management to internal audit, we offer comprehensive solutions to meet all your professional development and organizational needs.",
-    link: "#",
+    link: "/contact",
   },
 ];
 
