@@ -15,6 +15,11 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ExperienceTrainingRouteImport } from './routes/experience.training'
+import { Route as ExperienceIpsasRouteImport } from './routes/experience.ipsas'
+import { Route as ExperienceIfrsForSmesRouteImport } from './routes/experience.ifrs-for-smes'
+import { Route as ExperienceConsultancyServicesRouteImport } from './routes/experience.consultancy-services'
+import { Route as ExperienceAssetValuationRouteImport } from './routes/experience.asset-valuation'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -47,6 +52,33 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExperienceTrainingRoute = ExperienceTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => ExperienceRoute,
+} as any)
+const ExperienceIpsasRoute = ExperienceIpsasRouteImport.update({
+  id: '/ipsas',
+  path: '/ipsas',
+  getParentRoute: () => ExperienceRoute,
+} as any)
+const ExperienceIfrsForSmesRoute = ExperienceIfrsForSmesRouteImport.update({
+  id: '/ifrs-for-smes',
+  path: '/ifrs-for-smes',
+  getParentRoute: () => ExperienceRoute,
+} as any)
+const ExperienceConsultancyServicesRoute =
+  ExperienceConsultancyServicesRouteImport.update({
+    id: '/consultancy-services',
+    path: '/consultancy-services',
+    getParentRoute: () => ExperienceRoute,
+  } as any)
+const ExperienceAssetValuationRoute =
+  ExperienceAssetValuationRouteImport.update({
+    id: '/asset-valuation',
+    path: '/asset-valuation',
+    getParentRoute: () => ExperienceRoute,
+  } as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/admin/messages',
   path: '/admin/messages',
@@ -58,18 +90,28 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/experience': typeof ExperienceRoute
+  '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
+  '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
+  '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
+  '/experience/ipsas': typeof ExperienceIpsasRoute
+  '/experience/training': typeof ExperienceTrainingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/experience': typeof ExperienceRoute
+  '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
+  '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
+  '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
+  '/experience/ipsas': typeof ExperienceIpsasRoute
+  '/experience/training': typeof ExperienceTrainingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,9 +119,14 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/experience': typeof ExperienceRoute
+  '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
+  '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
+  '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
+  '/experience/ipsas': typeof ExperienceIpsasRoute
+  '/experience/training': typeof ExperienceTrainingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +138,11 @@ export interface FileRouteTypes {
     | '/experience'
     | '/services'
     | '/admin/messages'
+    | '/experience/asset-valuation'
+    | '/experience/consultancy-services'
+    | '/experience/ifrs-for-smes'
+    | '/experience/ipsas'
+    | '/experience/training'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +152,11 @@ export interface FileRouteTypes {
     | '/experience'
     | '/services'
     | '/admin/messages'
+    | '/experience/asset-valuation'
+    | '/experience/consultancy-services'
+    | '/experience/ifrs-for-smes'
+    | '/experience/ipsas'
+    | '/experience/training'
   id:
     | '__root__'
     | '/'
@@ -109,6 +166,11 @@ export interface FileRouteTypes {
     | '/experience'
     | '/services'
     | '/admin/messages'
+    | '/experience/asset-valuation'
+    | '/experience/consultancy-services'
+    | '/experience/ifrs-for-smes'
+    | '/experience/ipsas'
+    | '/experience/training'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -116,7 +178,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  ExperienceRoute: typeof ExperienceRoute
+  ExperienceRoute: typeof ExperienceRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
 }
@@ -165,6 +227,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/experience/training': {
+      id: '/experience/training'
+      path: '/training'
+      fullPath: '/experience/training'
+      preLoaderRoute: typeof ExperienceTrainingRouteImport
+      parentRoute: typeof ExperienceRoute
+    }
+    '/experience/ipsas': {
+      id: '/experience/ipsas'
+      path: '/ipsas'
+      fullPath: '/experience/ipsas'
+      preLoaderRoute: typeof ExperienceIpsasRouteImport
+      parentRoute: typeof ExperienceRoute
+    }
+    '/experience/ifrs-for-smes': {
+      id: '/experience/ifrs-for-smes'
+      path: '/ifrs-for-smes'
+      fullPath: '/experience/ifrs-for-smes'
+      preLoaderRoute: typeof ExperienceIfrsForSmesRouteImport
+      parentRoute: typeof ExperienceRoute
+    }
+    '/experience/consultancy-services': {
+      id: '/experience/consultancy-services'
+      path: '/consultancy-services'
+      fullPath: '/experience/consultancy-services'
+      preLoaderRoute: typeof ExperienceConsultancyServicesRouteImport
+      parentRoute: typeof ExperienceRoute
+    }
+    '/experience/asset-valuation': {
+      id: '/experience/asset-valuation'
+      path: '/asset-valuation'
+      fullPath: '/experience/asset-valuation'
+      preLoaderRoute: typeof ExperienceAssetValuationRouteImport
+      parentRoute: typeof ExperienceRoute
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/admin/messages'
@@ -175,12 +272,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ExperienceRouteChildren {
+  ExperienceAssetValuationRoute: typeof ExperienceAssetValuationRoute
+  ExperienceConsultancyServicesRoute: typeof ExperienceConsultancyServicesRoute
+  ExperienceIfrsForSmesRoute: typeof ExperienceIfrsForSmesRoute
+  ExperienceIpsasRoute: typeof ExperienceIpsasRoute
+  ExperienceTrainingRoute: typeof ExperienceTrainingRoute
+}
+
+const ExperienceRouteChildren: ExperienceRouteChildren = {
+  ExperienceAssetValuationRoute: ExperienceAssetValuationRoute,
+  ExperienceConsultancyServicesRoute: ExperienceConsultancyServicesRoute,
+  ExperienceIfrsForSmesRoute: ExperienceIfrsForSmesRoute,
+  ExperienceIpsasRoute: ExperienceIpsasRoute,
+  ExperienceTrainingRoute: ExperienceTrainingRoute,
+}
+
+const ExperienceRouteWithChildren = ExperienceRoute._addFileChildren(
+  ExperienceRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  ExperienceRoute: ExperienceRoute,
+  ExperienceRoute: ExperienceRouteWithChildren,
   ServicesRoute: ServicesRoute,
   AdminMessagesRoute: AdminMessagesRoute,
 }
