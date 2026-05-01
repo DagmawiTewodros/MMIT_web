@@ -56,12 +56,26 @@ export function Header() {
           ))}
         </nav>
 
-        <Link
-          to="/contact"
-          className="hidden md:inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary/90 transition"
-        >
-          Start a conversation
-        </Link>
+        <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary/90 transition"
+          >
+            Start a conversation
+          </Link>
+        </div>
+
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            aria-label="Toggle menu"
+            className="p-2 -mr-2"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
 
         <button
           aria-label="Toggle menu"
