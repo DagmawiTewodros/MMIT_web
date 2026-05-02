@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Trash2, Search, LogOut, Eye, EyeOff, Phone, Building2, Inbox } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { localMessages, type LocalSubmission } from "@/lib/local-messages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/messages")({
@@ -15,19 +14,9 @@ export const Route = createFileRoute("/admin/messages")({
   }),
 });
 
-type Submission = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  organization: string | null;
-  message: string;
-  is_read: boolean;
-  created_at: string;
-};
+type Submission = LocalSubmission;
 
 function AdminMessagesPage() {
-  const auth = useAdminAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,69 +27,22 @@ function AdminMessagesPage() {
   const [dateTo, setDateTo] = useState("");
   const [selected, setSelected] = useState<Submission | null>(null);
 
-  // Redirect if not authenticated
+  // Load from local storage and subscribe to changes
   useEffect(() => {
-    if (auth.status === "unauthenticated") {
-      navigate({ to: "/auth" });
-    }
-  }, [auth.status, navigate]);
+    const refresh = () => setItems(localMessages.list());
+    refresh();
+    setLoading(false);
+    const unsub = localMessages.subscribe(refresh);
+    return unsub;
+  }, []);
 
-  // Load + subscribe
+  // Keep selected in sync with items
   useEffect(() => {
-    if (auth.status !== "admin") return;
-    let cancelled = false;
-
-    const load = async () => {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from("contact_submissions")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (cancelled) return;
-      if (error) {
-        toast.error("Failed to load messages");
-      } else {
-        setItems((data ?? []) as Submission[]);
-      }
-      setLoading(false);
-    };
-    load();
-
-    const channel = supabase
-      .channel("contact_submissions_changes")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "contact_submissions" },
-        (payload) => {
-          setItems((prev) => [payload.new as Submission, ...prev]);
-          toast.message("New message received", {
-            description: (payload.new as Submission).name,
-          });
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "contact_submissions" },
-        (payload) => {
-          setItems((prev) =>
-            prev.map((m) => (m.id === (payload.new as Submission).id ? (payload.new as Submission) : m)),
-          );
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "contact_submissions" },
-        (payload) => {
-          setItems((prev) => prev.filter((m) => m.id !== (payload.old as { id: string }).id));
-        },
-      )
-      .subscribe();
-
-    return () => {
-      cancelled = true;
-      supabase.removeChannel(channel);
-    };
-  }, [auth.status]);
+    if (!selected) return;
+    const fresh = items.find((m) => m.id === selected.id);
+    if (fresh && fresh !== selected) setSelected(fresh);
+    if (!fresh) setSelected(null);
+  }, [items, selected]);
 
   const filtered = useMemo(() => {
     const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
@@ -130,60 +72,21 @@ function AdminMessagesPage() {
 
   const unreadCount = items.filter((m) => !m.is_read).length;
 
-  const toggleRead = async (m: Submission) => {
-    const { error } = await supabase
-      .from("contact_submissions")
-      .update({ is_read: !m.is_read })
-      .eq("id", m.id);
-    if (error) toast.error("Could not update message");
+  const toggleRead = (m: Submission) => {
+    localMessages.update(m.id, { is_read: !m.is_read });
   };
 
-  const deleteMessage = async (m: Submission) => {
+  const deleteMessage = (m: Submission) => {
     if (!confirm(`Delete message from ${m.name}? This cannot be undone.`)) return;
-    const { error } = await supabase.from("contact_submissions").delete().eq("id", m.id);
-    if (error) {
-      toast.error("Could not delete message");
-    } else {
-      toast.success("Message deleted");
-      if (selected?.id === m.id) setSelected(null);
-    }
+    localMessages.remove(m.id);
+    toast.success("Message deleted");
+    if (selected?.id === m.id) setSelected(null);
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const signOut = () => {
     navigate({ to: "/" });
   };
 
-  // Loading / auth states
-  if (auth.status === "loading") {
-    return (
-      <div className="min-h-screen grid place-items-center bg-background">
-        <div className="text-sm text-muted-foreground">Checking access…</div>
-      </div>
-    );
-  }
-
-  if (auth.status === "not-admin") {
-    return (
-      <div className="min-h-screen grid place-items-center bg-background px-4">
-        <div className="text-center max-w-md">
-          <h1 className="font-display text-3xl font-semibold mb-3">Access denied</h1>
-          <p className="text-muted-foreground mb-6">
-            Your account doesn't have admin access. Ask the site owner to grant you the
-            admin role.
-          </p>
-          <button
-            onClick={signOut}
-            className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:bg-primary/90"
-          >
-            Sign out
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (auth.status !== "admin") return null;
 
   return (
     <div className="min-h-screen bg-secondary/30">
@@ -195,13 +98,13 @@ function AdminMessagesPage() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted-foreground hidden sm:inline">
-              {auth.session.user.email}
+              Local storage mode
             </span>
             <button
               onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
             >
-              <LogOut className="h-3.5 w-3.5" /> Sign out
+              <LogOut className="h-3.5 w-3.5" /> Exit
             </button>
           </div>
         </div>

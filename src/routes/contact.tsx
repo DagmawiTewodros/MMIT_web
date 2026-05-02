@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { z } from "zod";
 import { SiteShell } from "@/components/site/SiteShell";
-import { supabase } from "@/integrations/supabase/client";
+import { localMessages } from "@/lib/local-messages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
@@ -53,14 +53,13 @@ function ContactPage() {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.from("contact_submissions").insert({
+      localMessages.add({
         name: parsed.data.name,
         email: parsed.data.email,
         phone: parsed.data.phone || null,
         organization: parsed.data.organization || null,
         message: parsed.data.message,
       });
-      if (error) throw error;
       setSubmitted(true);
       e.currentTarget.reset();
       toast.success("Message sent");
