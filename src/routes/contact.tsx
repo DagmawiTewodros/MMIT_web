@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { z } from "zod";
 import { SiteShell } from "@/components/site/SiteShell";
-import { supabase } from "@/integrations/supabase/client";
+import { localMessages } from "@/lib/local-messages";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
