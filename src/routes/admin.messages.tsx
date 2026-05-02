@@ -98,13 +98,13 @@ function AdminMessagesPage() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted-foreground hidden sm:inline">
-              {auth.session.user.email}
+              Local storage mode
             </span>
             <button
               onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
             >
-              <LogOut className="h-3.5 w-3.5" /> Sign out
+              <LogOut className="h-3.5 w-3.5" /> Exit
             </button>
           </div>
         </div>
