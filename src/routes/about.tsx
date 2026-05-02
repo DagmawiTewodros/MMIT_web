@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { SiteShell } from "@/components/site/SiteShell";
 import hero from "@/assets/mated/hero.jpg";
 import consulting from "@/assets/mated/team.jpg";
+import ceoImg from "@/assets/mated/ceo.jpg";
+import deputyCeoImg from "@/assets/mated/deputy-ceo.jpg";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -89,6 +91,54 @@ function AboutPage() {
       </section>
 
       <section className="py-24 md:py-32">
+        <div className="container-editorial">
+          <div className="text-xs uppercase tracking-[0.2em] text-accent font-medium mb-4 text-center">
+            Leadership
+          </div>
+          <h2 className="font-display text-4xl md:text-5xl text-center mb-16 text-balance">
+            The people leading MATED
+          </h2>
+          <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+            {[
+              {
+                name: "Tewodros Endale",
+                role: "Chief Executive Officer",
+                bio: "Tewodros leads MATED's strategy and client engagements, drawing on more than two decades of experience advising public and private institutions across Ethiopia.",
+                img: ceoImg,
+              },
+              {
+                name: "Wogayehu W/Yesus",
+                role: "Deputy Chief Executive Officer",
+                bio: "Wogayehu oversees consulting delivery and operations, with deep expertise in financial reporting, IPSAS adoption and capacity-building programs.",
+                img: deputyCeoImg,
+              },
+            ].map((p) => (
+              <div
+                key={p.name}
+                className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col"
+              >
+                <img
+                  src={p.img}
+                  alt={`${p.name}, ${p.role}`}
+                  loading="lazy"
+                  width={768}
+                  height={768}
+                  className="w-full aspect-[4/3] object-cover object-top"
+                />
+                <div className="p-7">
+                  <div className="text-xs uppercase tracking-[0.18em] text-accent mb-2">
+                    {p.role}
+                  </div>
+                  <h3 className="font-display text-2xl font-semibold mb-3">{p.name}</h3>
+                  <p className="text-sm text-foreground/80 leading-relaxed">{p.bio}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 md:py-32 bg-secondary/40 border-t border-border">
         <div className="container-editorial text-center max-w-3xl mx-auto">
           <h2 className="font-display text-4xl md:text-5xl leading-tight text-balance">
             Ready to explore how we can help?
