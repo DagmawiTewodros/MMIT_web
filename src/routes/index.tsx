@@ -106,7 +106,7 @@ function Index() {
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="md:col-span-5 relative"
           >
-            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted">
               <AnimatePresence mode="sync">
                 <motion.img
                   key={slide}
@@ -116,9 +116,7 @@ function Index() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  width={960}
-                  height={1280}
+                  className="absolute inset-0 h-full w-full object-cover object-top"
                 />
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
