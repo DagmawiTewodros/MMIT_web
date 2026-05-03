@@ -98,6 +98,35 @@ function AboutPage() {
           <h2 className="font-display text-4xl md:text-5xl text-center mb-16 text-balance">
             The people leading MATED
           </h2>
+          {/* Compact strip — original site style */}
+          <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto mb-16 border-t border-border pt-10">
+            {[
+              { name: "Tewodros Endale", role: "CEO", img: ceoImg, anchor: "tewodros" },
+              { name: "Wogayehu W/Yesus", role: "Deputy CEO", img: deputyCeoImg, anchor: "wogayehu" },
+            ].map((p) => (
+              <div key={p.name} className="flex items-center gap-5">
+                <img
+                  src={p.img}
+                  alt={p.name}
+                  loading="lazy"
+                  className="h-16 w-16 rounded-full object-cover object-top border border-border"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="font-display text-lg font-semibold leading-tight">
+                    {p.name}
+                  </div>
+                  <div className="text-sm text-muted-foreground">{p.role}</div>
+                </div>
+                <a
+                  href={`#${p.anchor}`}
+                  className="inline-flex items-center rounded-md bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary/90 transition whitespace-nowrap"
+                >
+                  Discover More
+                </a>
+              </div>
+            ))}
+          </div>
+
           <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
             {[
               {
@@ -105,17 +134,20 @@ function AboutPage() {
                 role: "Chief Executive Officer",
                 bio: "Tewodros leads MATED's strategy and client engagements, drawing on more than two decades of experience advising public and private institutions across Ethiopia.",
                 img: ceoImg,
+                anchor: "tewodros",
               },
               {
                 name: "Wogayehu W/Yesus",
                 role: "Deputy Chief Executive Officer",
                 bio: "Wogayehu oversees consulting delivery and operations, with deep expertise in financial reporting, IPSAS adoption and capacity-building programs.",
                 img: deputyCeoImg,
+                anchor: "wogayehu",
               },
             ].map((p) => (
               <div
                 key={p.name}
-                className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col"
+                id={p.anchor}
+                className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col scroll-mt-32"
               >
                 <img
                   src={p.img}
