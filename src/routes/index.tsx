@@ -289,24 +289,46 @@ function Index() {
           <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground text-center mb-10">
             Trusted by leading Ethiopian institutions
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-8 md:gap-12 items-center">
-            {[
-              [partnerChamber, "Addis Ababa Chamber of Commerce"],
-              [partnerAirports, "Ethiopian Airports Enterprise"],
-              [partnerElili, "Elili Hotel"],
-              [partnerFamily, "Ethiopian Family"],
-              [partnerTirett, "Tirett"],
-              [partnerPulp, "Ethiopian Paper and Pulp"],
-            ].map(([src, alt]) => (
-              <div key={alt} className="flex items-center justify-center">
-                <img
-                  src={src}
-                  alt={alt}
-                  loading="lazy"
-                  className="max-h-16 w-auto object-contain opacity-70 hover:opacity-100 transition grayscale hover:grayscale-0"
-                />
-              </div>
-            ))}
+          <div
+            className="group relative overflow-hidden"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+            }}
+          >
+            <div className="flex w-max animate-marquee gap-12 md:gap-20 items-center group-hover:[animation-play-state:paused]">
+              {[
+                [partnerChamber, "Addis Ababa Chamber of Commerce"],
+                [partnerAirports, "Ethiopian Airports Enterprise"],
+                [partnerElili, "Elili Hotel"],
+                [partnerFamily, "Ethiopian Family"],
+                [partnerTirett, "Tirett"],
+                [partnerPulp, "Ethiopian Paper and Pulp"],
+              ]
+                .concat([
+                  [partnerChamber, "Addis Ababa Chamber of Commerce"],
+                  [partnerAirports, "Ethiopian Airports Enterprise"],
+                  [partnerElili, "Elili Hotel"],
+                  [partnerFamily, "Ethiopian Family"],
+                  [partnerTirett, "Tirett"],
+                  [partnerPulp, "Ethiopian Paper and Pulp"],
+                ])
+                .map(([src, alt], i) => (
+                  <div
+                    key={`${alt}-${i}`}
+                    className="flex items-center justify-center shrink-0"
+                  >
+                    <img
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                      className="max-h-16 w-auto object-contain opacity-70 hover:opacity-100 transition grayscale hover:grayscale-0"
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </section>
