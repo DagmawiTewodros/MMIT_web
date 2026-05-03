@@ -324,7 +324,7 @@ function Index() {
                       src={src}
                       alt={alt}
                       loading="lazy"
-                      className="max-h-16 w-auto object-contain opacity-70 hover:opacity-100 transition grayscale hover:grayscale-0"
+                      className="max-h-16 w-auto object-contain hover:scale-110 transition"
                     />
                   </div>
                 ))}
