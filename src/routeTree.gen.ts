@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,7 +21,9 @@ import { Route as ExperienceIpsasRouteImport } from './routes/experience.ipsas'
 import { Route as ExperienceIfrsForSmesRouteImport } from './routes/experience.ifrs-for-smes'
 import { Route as ExperienceConsultancyServicesRouteImport } from './routes/experience.consultancy-services'
 import { Route as ExperienceAssetValuationRouteImport } from './routes/experience.asset-valuation'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -35,6 +38,11 @@ const ExperienceRoute = ExperienceRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -79,9 +87,19 @@ const ExperienceAssetValuationRoute =
     path: '/asset-valuation',
     getParentRoute: () => ExperienceRoute,
   } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/admin/messages',
   path: '/admin/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/admin/blog',
+  path: '/admin/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -89,10 +107,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
   '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
   '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
@@ -103,10 +124,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
   '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
   '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
@@ -118,10 +142,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
   '/services': typeof ServicesRoute
+  '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
   '/experience/consultancy-services': typeof ExperienceConsultancyServicesRoute
   '/experience/ifrs-for-smes': typeof ExperienceIfrsForSmesRoute
@@ -134,10 +161,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/blog'
     | '/contact'
     | '/experience'
     | '/services'
+    | '/admin/blog'
     | '/admin/messages'
+    | '/blog/$slug'
     | '/experience/asset-valuation'
     | '/experience/consultancy-services'
     | '/experience/ifrs-for-smes'
@@ -148,10 +178,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/blog'
     | '/contact'
     | '/experience'
     | '/services'
+    | '/admin/blog'
     | '/admin/messages'
+    | '/blog/$slug'
     | '/experience/asset-valuation'
     | '/experience/consultancy-services'
     | '/experience/ifrs-for-smes'
@@ -162,10 +195,13 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/blog'
     | '/contact'
     | '/experience'
     | '/services'
+    | '/admin/blog'
     | '/admin/messages'
+    | '/blog/$slug'
     | '/experience/asset-valuation'
     | '/experience/consultancy-services'
     | '/experience/ifrs-for-smes'
@@ -177,9 +213,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRouteWithChildren
   ServicesRoute: typeof ServicesRoute
+  AdminBlogRoute: typeof AdminBlogRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
 }
 
@@ -204,6 +242,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -262,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperienceAssetValuationRouteImport
       parentRoute: typeof ExperienceRoute
     }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/admin/messages'
@@ -269,8 +321,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/admin/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface ExperienceRouteChildren {
   ExperienceAssetValuationRoute: typeof ExperienceAssetValuationRoute
@@ -296,20 +365,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRouteWithChildren,
   ServicesRoute: ServicesRoute,
+  AdminBlogRoute: AdminBlogRoute,
   AdminMessagesRoute: AdminMessagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
