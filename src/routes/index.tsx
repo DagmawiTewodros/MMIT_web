@@ -7,7 +7,6 @@ import heroA from "@/assets/mated/training-2.jpg";
 import heroB from "@/assets/mated/training-1.jpg";
 import heroC from "@/assets/mated/consulting-1.jpg";
 import heroD from "@/assets/mated/hero-classroom.jpg";
-import heroE from "@/assets/mated/consulting-3.jpg";
 import heroF from "@/assets/mated/team.jpg";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
@@ -45,7 +44,6 @@ const heroSlides = [
   { src: heroB, alt: "MATED capacity development" },
   { src: heroC, alt: "MATED consulting engagement" },
   { src: heroD, alt: "MATED advisory work" },
-  { src: heroE, alt: "MATED strategy session" },
   { src: heroF, alt: "MATED team" },
 ];
 
