@@ -36,13 +36,19 @@ export const Route = createRootRoute({
         content:
           "MATED is an Addis Ababa–based consulting and training firm delivering strategic solutions in management, finance, audit, taxation and IT.",
       },
-      { property: "og:title", content: "MATED Institute" },
+      { property: "og:title", content: "MATED Institute — Management Consulting & Training in Ethiopia" },
       {
         property: "og:description",
         content: "Strategic management consulting, research and capacity development.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "MATED Institute — Management Consulting & Training in Ethiopia" },
+      { name: "description", content: "MateD Refresh modernizes the Mated Institute website with a clean, updated look." },
+      { property: "og:description", content: "MateD Refresh modernizes the Mated Institute website with a clean, updated look." },
+      { name: "twitter:description", content: "MateD Refresh modernizes the Mated Institute website with a clean, updated look." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1161bac3-1d39-4b36-a07b-98fa3249732e/id-preview-b9307b29--84d41a7f-c7fe-4981-a81d-0a35130d3262.lovable.app-1777968579972.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1161bac3-1d39-4b36-a07b-98fa3249732e/id-preview-b9307b29--84d41a7f-c7fe-4981-a81d-0a35130d3262.lovable.app-1777968579972.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
