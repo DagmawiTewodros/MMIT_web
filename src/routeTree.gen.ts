@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ExperienceRouteImport } from './routes/experience'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -28,6 +29,11 @@ import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExperienceRoute = ExperienceRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
+  '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
+  '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/experience': typeof ExperienceRouteWithChildren
+  '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/experience'
+    | '/gallery'
     | '/services'
     | '/admin/blog'
     | '/admin/messages'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/experience'
+    | '/gallery'
     | '/services'
     | '/admin/blog'
     | '/admin/messages'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/experience'
+    | '/gallery'
     | '/services'
     | '/admin/blog'
     | '/admin/messages'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   ContactRoute: typeof ContactRoute
   ExperienceRoute: typeof ExperienceRouteWithChildren
+  GalleryRoute: typeof GalleryRoute
   ServicesRoute: typeof ServicesRoute
   AdminBlogRoute: typeof AdminBlogRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/experience': {
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   ContactRoute: ContactRoute,
   ExperienceRoute: ExperienceRouteWithChildren,
+  GalleryRoute: GalleryRoute,
   ServicesRoute: ServicesRoute,
   AdminBlogRoute: AdminBlogRoute,
   AdminMessagesRoute: AdminMessagesRoute,
