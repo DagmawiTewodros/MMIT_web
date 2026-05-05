@@ -40,7 +40,7 @@ function GalleryPage() {
 
   return (
     <SiteShell>
-      <section className="pt-32 md:pt-40 pb-12 md:pb-16" style={{ background: "#f9f9f9" }}>
+      <section className="pt-32 md:pt-40 pb-12 md:pb-16 bg-muted/40">
         <div className="container-editorial text-center">
           <h6 className="text-xs uppercase tracking-[0.25em] font-medium mb-3" style={{ color: ORANGE }}>
             Our Work
@@ -55,7 +55,7 @@ function GalleryPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-white dark:bg-background">
+      <section className="py-16 md:py-20 bg-background">
         <div className="container-editorial">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((it, idx) => (
