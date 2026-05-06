@@ -40,29 +40,29 @@ function GalleryPage() {
 
   return (
     <SiteShell>
-      <section className="pt-32 md:pt-40 pb-12 md:pb-16 bg-muted/40">
+      <section className="pt-24 sm:pt-32 md:pt-40 pb-10 sm:pb-12 md:pb-16 bg-muted/40">
         <div className="container-editorial text-center">
-          <h6 className="text-xs uppercase tracking-[0.25em] font-medium mb-3" style={{ color: ORANGE }}>
+          <h6 className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] font-medium mb-2 sm:mb-3" style={{ color: ORANGE }}>
             Our Work
           </h6>
-          <h1 className="font-display text-3xl md:text-5xl font-semibold mb-4">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-semibold mb-3 sm:mb-4">
             Accomplished <span style={{ color: ORANGE }}>Works</span>
           </h1>
-          <p className="max-w-2xl mx-auto text-foreground/70">
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-foreground/70 px-2">
             A glimpse into our trainings, certification ceremonies and consultancy
             engagements with partner organizations across Ethiopia.
           </p>
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-background">
+      <section className="py-10 sm:py-16 md:py-20 bg-background">
         <div className="container-editorial">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {items.map((it, idx) => (
               <button
                 key={it.title}
                 onClick={() => setActive(idx)}
-                className="group relative overflow-hidden rounded-lg bg-muted text-left"
+                className="group relative overflow-hidden rounded-lg bg-muted text-left w-full"
                 style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.06)" }}
               >
                 <div className="aspect-[4/3] overflow-hidden">
@@ -73,12 +73,13 @@ function GalleryPage() {
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all">
+                {/* Always-visible caption on mobile, hover on desktop */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 text-white sm:translate-y-2 sm:group-hover:translate-y-0 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
                   <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: ORANGE }}>
                     {it.category}
                   </p>
-                  <h3 className="font-display text-lg font-semibold">{it.title}</h3>
+                  <h3 className="font-display text-base sm:text-lg font-semibold leading-tight">{it.title}</h3>
                 </div>
               </button>
             ))}
