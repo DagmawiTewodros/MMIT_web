@@ -155,7 +155,7 @@ function AboutPage() {
                   loading="lazy"
                   width={768}
                   height={768}
-                  className="w-full aspect-[4/3] object-cover object-top"
+                  className="w-full aspect-[4/5] object-cover object-center"
                 />
                 <div className="p-7">
                   <div className="text-xs uppercase tracking-[0.18em] text-accent mb-2">
