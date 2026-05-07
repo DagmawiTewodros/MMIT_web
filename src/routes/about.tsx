@@ -42,31 +42,23 @@ function AboutPage() {
       </section>
 
       <section className="pb-24 md:pb-32">
-        <div className="container-editorial grid md:grid-cols-12 gap-12">
-          <div className="md:col-span-7 space-y-6 text-lg leading-relaxed text-foreground/85">
-            <p>
-              MATED Consulting & Training PLC was founded to bring rigor, clarity and
-              local insight to the institutions shaping Ethiopia's economy. From our
-              base in Addis Ababa we serve government, non-governmental and private
-              clients across the country.
-            </p>
-            <p>
-              Our work spans strategy, finance, auditing, taxation, information
-              technology and other business-related disciplines. What unites it is a
-              simple commitment: every recommendation we make is one we would be
-              willing to implement ourselves.
-            </p>
-            <p>
-              We measure success the way our clients do — by what changes after we
-              leave the room.
-            </p>
-          </div>
-
-          <div className="md:col-span-5">
-            <img src={consulting} alt="MATED consultants collaborating" loading="lazy"
-              width={1280} height={896}
-              className="rounded-2xl aspect-[4/5] object-cover w-full" />
-          </div>
+        <div className="container-editorial max-w-3xl space-y-6 text-lg leading-relaxed text-foreground/85">
+          <p>
+            MATED Consulting & Training PLC was founded to bring rigor, clarity and
+            local insight to the institutions shaping Ethiopia's economy. From our
+            base in Addis Ababa we serve government, non-governmental and private
+            clients across the country.
+          </p>
+          <p>
+            Our work spans strategy, finance, auditing, taxation, information
+            technology and other business-related disciplines. What unites it is a
+            simple commitment: every recommendation we make is one we would be
+            willing to implement ourselves.
+          </p>
+          <p>
+            We measure success the way our clients do — by what changes after we
+            leave the room.
+          </p>
         </div>
       </section>
 
