@@ -10,7 +10,7 @@ import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
 import research from "@/assets/mated/consulting-3.jpg";
 import approachA from "@/assets/mated/consulting-2.jpg";
-import approachB from "@/assets/mated/team.jpg";
+import approachB from "@/assets/mated/approach-group.jpg";
 import partnerChamber from "@/assets/mated/partner-chamber.jpg";
 import partnerAirports from "@/assets/mated/partner-airports.jpg";
 import partnerElili from "@/assets/mated/partner-elili.jpg";

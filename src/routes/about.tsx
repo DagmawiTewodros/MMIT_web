@@ -149,14 +149,6 @@ function AboutPage() {
                 id={p.anchor}
                 className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col scroll-mt-32"
               >
-                <img
-                  src={p.img}
-                  alt={`${p.name}, ${p.role}`}
-                  loading="lazy"
-                  width={768}
-                  height={768}
-                  className="w-full aspect-[4/5] object-cover object-center"
-                />
                 <div className="p-7">
                   <div className="text-xs uppercase tracking-[0.18em] text-accent mb-2">
                     {p.role}
