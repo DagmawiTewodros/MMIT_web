@@ -96,10 +96,16 @@ function AdminMessagesPage() {
           <Link to="/" className="font-display font-semibold tracking-tight">
             MATED <span className="text-muted-foreground font-normal">· Admin</span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground hidden sm:inline">
               Local storage mode
             </span>
+            <Link
+              to="/admin/blog"
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
+            >
+              Blog
+            </Link>
             <button
               onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
