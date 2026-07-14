@@ -23,10 +23,10 @@ const schema = z.object({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const mode = "signin" as const; // public sign-up disabled — admins are provisioned manually
 
   // If already signed in, redirect to admin
   useEffect(() => {
@@ -44,24 +44,13 @@ function AuthPage() {
     }
     setLoading(true);
     try {
-      if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: parsed.data.email,
-          password: parsed.data.password,
-        });
-        if (error) throw error;
-        toast.success("Welcome back");
-        navigate({ to: "/admin/messages" });
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email: parsed.data.email,
-          password: parsed.data.password,
-          options: { emailRedirectTo: `${window.location.origin}/admin/messages` },
-        });
-        if (error) throw error;
-        toast.success("Account created. You can sign in now.");
-        setMode("signin");
-      }
+      const { error } = await supabase.auth.signInWithPassword({
+        email: parsed.data.email,
+        password: parsed.data.password,
+      });
+      if (error) throw error;
+      toast.success("Welcome back");
+      navigate({ to: "/admin/messages" });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Authentication failed";
       toast.error(msg);
@@ -127,17 +116,9 @@ function AuthPage() {
               {loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
             </button>
 
-            <div className="text-center text-sm text-muted-foreground pt-2">
-              {mode === "signin" ? (
-                <button type="button" onClick={() => setMode("signup")} className="hover:text-primary">
-                  Need an account? Create one
-                </button>
-              ) : (
-                <button type="button" onClick={() => setMode("signin")} className="hover:text-primary">
-                  Already have an account? Sign in
-                </button>
-              )}
-            </div>
+            <p className="text-center text-xs text-muted-foreground pt-2">
+              Admin accounts are provisioned manually. Contact the site owner for access.
+            </p>
           </form>
 
           <div className="text-center mt-8 text-sm">
