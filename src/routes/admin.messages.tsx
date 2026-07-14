@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Mail, Trash2, Search, LogOut, Eye, EyeOff, Phone, Building2, Inbox } from "lucide-react";
-import { localMessages, type LocalSubmission } from "@/lib/local-messages";
+import { supabase } from "@/integrations/supabase/client";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/messages")({
@@ -14,9 +15,19 @@ export const Route = createFileRoute("/admin/messages")({
   }),
 });
 
-type Submission = LocalSubmission;
+type Submission = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  organization: string | null;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+};
 
 function AdminMessagesPage() {
+  const auth = useAdminAuth();
   const navigate = useNavigate();
   const [items, setItems] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,16 +38,23 @@ function AdminMessagesPage() {
   const [dateTo, setDateTo] = useState("");
   const [selected, setSelected] = useState<Submission | null>(null);
 
-  // Load from local storage and subscribe to changes
-  useEffect(() => {
-    const refresh = () => setItems(localMessages.list());
-    refresh();
-    setLoading(false);
-    const unsub = localMessages.subscribe(refresh);
-    return unsub;
+  const refresh = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("contact_submissions")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setItems((data as Submission[] | null) ?? []);
   }, []);
 
-  // Keep selected in sync with items
+  useEffect(() => {
+    if (auth.status !== "admin") return;
+    refresh().finally(() => setLoading(false));
+  }, [auth.status, refresh]);
+
   useEffect(() => {
     if (!selected) return;
     const fresh = items.find((m) => m.id === selected.id);
@@ -44,62 +62,75 @@ function AdminMessagesPage() {
     if (!fresh) setSelected(null);
   }, [items, selected]);
 
-  const filtered = useMemo(() => {
-    const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
-    const toTs = dateTo ? new Date(dateTo + "T23:59:59.999").getTime() : null;
-    const s = search.trim().toLowerCase();
-    return items.filter((m) => {
-      if (filter === "unread" && m.is_read) return false;
-      if (filter === "read" && !m.is_read) return false;
-      const created = new Date(m.created_at).getTime();
-      if (fromTs !== null && created < fromTs) return false;
-      if (toTs !== null && created > toTs) return false;
-      if (s) {
-        const name = m.name.toLowerCase();
-        const email = m.email.toLowerCase();
-        if (searchField === "name") return name.includes(s);
-        if (searchField === "email") return email.includes(s);
-        return (
-          name.includes(s) ||
-          email.includes(s) ||
-          m.message.toLowerCase().includes(s) ||
-          (m.organization?.toLowerCase().includes(s) ?? false)
-        );
-      }
-      return true;
-    });
-  }, [items, filter, search, searchField, dateFrom, dateTo]);
+  if (auth.status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
 
+  if (auth.status === "unauthenticated") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">You must sign in to view messages.</p>
+        <Link
+          to="/auth"
+          className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium"
+        >
+          Sign in
+        </Link>
+      </div>
+    );
+  }
+
+  if (auth.status === "not-admin") {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-6">
+        <p className="text-muted-foreground max-w-sm">
+          Your account does not have admin access. Contact the site owner if you believe this is a mistake.
+        </p>
+        <Link to="/" className="text-sm underline">
+          Back to site
+        </Link>
+      </div>
+    );
+  }
+
+  const filtered = filterMessages(items, filter, search, searchField, dateFrom, dateTo);
   const unreadCount = items.filter((m) => !m.is_read).length;
 
-  const toggleRead = (m: Submission) => {
-    localMessages.update(m.id, { is_read: !m.is_read });
+  const toggleRead = async (m: Submission) => {
+    const { error } = await supabase
+      .from("contact_submissions")
+      .update({ is_read: !m.is_read })
+      .eq("id", m.id);
+    if (error) return toast.error(error.message);
+    refresh();
   };
 
-  const deleteMessage = (m: Submission) => {
+  const deleteMessage = async (m: Submission) => {
     if (!confirm(`Delete message from ${m.name}? This cannot be undone.`)) return;
-    localMessages.remove(m.id);
+    const { error } = await supabase.from("contact_submissions").delete().eq("id", m.id);
+    if (error) return toast.error(error.message);
     toast.success("Message deleted");
     if (selected?.id === m.id) setSelected(null);
+    refresh();
   };
 
-  const signOut = () => {
+  const signOut = async () => {
+    await supabase.auth.signOut();
     navigate({ to: "/" });
   };
 
-
   return (
     <div className="min-h-screen bg-secondary/30">
-      {/* Top bar */}
       <header className="bg-background border-b border-border sticky top-0 z-30">
         <div className="container-editorial h-16 flex items-center justify-between gap-4">
           <Link to="/" className="font-display font-semibold tracking-tight">
             MATED <span className="text-muted-foreground font-normal">· Admin</span>
           </Link>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground hidden sm:inline">
-              Local storage mode
-            </span>
             <Link
               to="/admin/blog"
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
@@ -110,7 +141,7 @@ function AdminMessagesPage() {
               onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
             >
-              <LogOut className="h-3.5 w-3.5" /> Exit
+              <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           </div>
         </div>
@@ -207,7 +238,6 @@ function AdminMessagesPage() {
         </div>
 
         <div className="grid lg:grid-cols-12 gap-6">
-          {/* List */}
           <div className="lg:col-span-5 bg-card rounded-2xl border border-border overflow-hidden">
             {loading ? (
               <div className="p-10 text-center text-sm text-muted-foreground">
@@ -268,7 +298,6 @@ function AdminMessagesPage() {
             )}
           </div>
 
-          {/* Detail */}
           <div className="lg:col-span-7">
             {selected ? (
               <DetailCard
@@ -287,6 +316,39 @@ function AdminMessagesPage() {
       </div>
     </div>
   );
+}
+
+function filterMessages(
+  items: Submission[],
+  filter: "all" | "unread" | "read",
+  search: string,
+  searchField: "all" | "name" | "email",
+  dateFrom: string,
+  dateTo: string,
+) {
+  const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
+  const toTs = dateTo ? new Date(dateTo + "T23:59:59.999").getTime() : null;
+  const s = search.trim().toLowerCase();
+  return items.filter((m) => {
+    if (filter === "unread" && m.is_read) return false;
+    if (filter === "read" && !m.is_read) return false;
+    const created = new Date(m.created_at).getTime();
+    if (fromTs !== null && created < fromTs) return false;
+    if (toTs !== null && created > toTs) return false;
+    if (s) {
+      const name = m.name.toLowerCase();
+      const email = m.email.toLowerCase();
+      if (searchField === "name") return name.includes(s);
+      if (searchField === "email") return email.includes(s);
+      return (
+        name.includes(s) ||
+        email.includes(s) ||
+        m.message.toLowerCase().includes(s) ||
+        (m.organization?.toLowerCase().includes(s) ?? false)
+      );
+    }
+    return true;
+  });
 }
 
 function DetailCard({
