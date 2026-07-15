@@ -402,6 +402,44 @@ function PostEditor({
             </Field>
           </div>
 
+          <Field label="Cover image (optional)" hint="JPG, PNG or WEBP · max 5MB">
+            <div className="space-y-3">
+              {imageUrl ? (
+                <div className="relative inline-block">
+                  <img
+                    src={imageUrl}
+                    alt="Cover preview"
+                    className="max-h-48 rounded-lg border border-border object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl(null)}
+                    className="absolute -top-2 -right-2 inline-flex items-center justify-center h-7 w-7 rounded-full bg-destructive text-destructive-foreground text-xs shadow"
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : null}
+              <div>
+                <label className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium cursor-pointer hover:bg-muted transition">
+                  {uploading ? "Uploading…" : imageUrl ? "Replace image" : "Upload image"}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    disabled={uploading}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) onPickImage(f);
+                      e.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          </Field>
+
           <Field label="Excerpt (optional)" hint="Shown on the blog index">
             <textarea
               value={excerpt}
