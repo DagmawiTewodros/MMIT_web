@@ -43,7 +43,7 @@ function BlogIndex() {
     let mounted = true;
     supabase
       .from("blog_posts")
-      .select("id, slug, title, excerpt, author_name, published_at, created_at")
+      .select("id, slug, title, excerpt, author_name, image_url, published_at, created_at")
       .eq("published", true)
       .order("published_at", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false })
