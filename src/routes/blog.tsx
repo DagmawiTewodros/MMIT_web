@@ -122,6 +122,7 @@ function BlogIndex() {
                       Read article{" "}
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
                     </div>
+                    </div>
                   </Link>
                 </li>
               ))}
