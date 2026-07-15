@@ -276,12 +276,44 @@ function PostEditor({
   const [author, setAuthor] = useState(initial?.author_name ?? "");
   const [content, setContent] = useState(initial?.content_md ?? "");
   const [published, setPublished] = useState(initial?.published ?? false);
+  const [imageUrl, setImageUrl] = useState<string | null>(initial?.image_url ?? null);
+  const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!slugTouched) setSlug(slugify(title));
   }, [title, slugTouched]);
+
+  const onPickImage = async (file: File) => {
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast.error("Only JPG, PNG or WEBP images are allowed");
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error("Image must be 5MB or smaller");
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("blog-images")
+        .createSignedUrl(path, IMAGE_SIGN_EXPIRY);
+      if (signErr || !signed) throw signErr ?? new Error("Failed to sign URL");
+      setImageUrl(signed.signedUrl);
+      toast.success("Image uploaded");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const onSave = async () => {
     if (!title.trim()) return toast.error("Title is required");
@@ -293,6 +325,7 @@ function PostEditor({
       excerpt: excerpt.trim() || null,
       author_name: author.trim() || null,
       content_md: content,
+      image_url: imageUrl,
       published,
       published_at:
         published && !initial?.published_at
