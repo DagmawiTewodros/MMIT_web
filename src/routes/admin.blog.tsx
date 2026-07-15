@@ -24,11 +24,16 @@ type Post = {
   excerpt: string | null;
   content_md: string;
   author_name: string | null;
+  image_url: string | null;
   published: boolean;
   published_at: string | null;
   created_at: string;
   updated_at: string;
 };
+
+const IMAGE_SIGN_EXPIRY = 60 * 60 * 24 * 365 * 10; // 10 years
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function slugify(s: string) {
   return s
