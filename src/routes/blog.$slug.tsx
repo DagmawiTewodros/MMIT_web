@@ -39,7 +39,7 @@ function BlogPostPage() {
     supabase
       .from("blog_posts")
       .select(
-        "id, slug, title, excerpt, content_md, author_name, published_at, created_at",
+        "id, slug, title, excerpt, content_md, author_name, image_url, published_at, created_at",
       )
       .eq("slug", slug)
       .eq("published", true)
