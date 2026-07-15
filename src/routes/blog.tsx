@@ -87,13 +87,24 @@ function BlogIndex() {
               {posts.map((p) => (
                 <li
                   key={p.id}
-                  className="group rounded-2xl border border-border bg-card p-8 hover:border-foreground/30 transition"
+                  className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-foreground/30 transition"
                 >
                   <Link
                     to="/blog/$slug"
                     params={{ slug: p.slug }}
                     className="block"
                   >
+                    {p.image_url ? (
+                      <div className="aspect-[16/9] overflow-hidden bg-muted">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="p-8">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
                       <CalendarDays className="h-3.5 w-3.5" />
                       {formatDate(p.published_at ?? p.created_at)}
