@@ -30,6 +30,7 @@ type Post = {
   title: string;
   excerpt: string | null;
   author_name: string | null;
+  image_url: string | null;
   published_at: string | null;
   created_at: string;
 };
@@ -42,7 +43,7 @@ function BlogIndex() {
     let mounted = true;
     supabase
       .from("blog_posts")
-      .select("id, slug, title, excerpt, author_name, published_at, created_at")
+      .select("id, slug, title, excerpt, author_name, image_url, published_at, created_at")
       .eq("published", true)
       .order("published_at", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false })
@@ -86,13 +87,24 @@ function BlogIndex() {
               {posts.map((p) => (
                 <li
                   key={p.id}
-                  className="group rounded-2xl border border-border bg-card p-8 hover:border-foreground/30 transition"
+                  className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-foreground/30 transition"
                 >
                   <Link
                     to="/blog/$slug"
                     params={{ slug: p.slug }}
                     className="block"
                   >
+                    {p.image_url ? (
+                      <div className="aspect-[16/9] overflow-hidden bg-muted">
+                        <img
+                          src={p.image_url}
+                          alt={p.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="p-8">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
                       <CalendarDays className="h-3.5 w-3.5" />
                       {formatDate(p.published_at ?? p.created_at)}
@@ -109,6 +121,7 @@ function BlogIndex() {
                     <div className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium">
                       Read article{" "}
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition" />
+                    </div>
                     </div>
                   </Link>
                 </li>

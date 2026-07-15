@@ -23,6 +23,7 @@ type Post = {
   excerpt: string | null;
   content_md: string;
   author_name: string | null;
+  image_url: string | null;
   published_at: string | null;
   created_at: string;
 };
@@ -38,7 +39,7 @@ function BlogPostPage() {
     supabase
       .from("blog_posts")
       .select(
-        "id, slug, title, excerpt, content_md, author_name, published_at, created_at",
+        "id, slug, title, excerpt, content_md, author_name, image_url, published_at, created_at",
       )
       .eq("slug", slug)
       .eq("published", true)
@@ -91,6 +92,17 @@ function BlogPostPage() {
                   {post.excerpt}
                 </p>
               ) : null}
+
+              {post.image_url ? (
+                <div className="mt-8 rounded-2xl overflow-hidden border border-border bg-muted">
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              ) : null}
+
 
               <div className="prose prose-neutral dark:prose-invert max-w-none mt-10 prose-headings:font-display prose-a:text-primary">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>

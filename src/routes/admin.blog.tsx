@@ -24,11 +24,16 @@ type Post = {
   excerpt: string | null;
   content_md: string;
   author_name: string | null;
+  image_url: string | null;
   published: boolean;
   published_at: string | null;
   created_at: string;
   updated_at: string;
 };
+
+const IMAGE_SIGN_EXPIRY = 60 * 60 * 24 * 365 * 10; // 10 years
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 function slugify(s: string) {
   return s
@@ -271,12 +276,44 @@ function PostEditor({
   const [author, setAuthor] = useState(initial?.author_name ?? "");
   const [content, setContent] = useState(initial?.content_md ?? "");
   const [published, setPublished] = useState(initial?.published ?? false);
+  const [imageUrl, setImageUrl] = useState<string | null>(initial?.image_url ?? null);
+  const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(false);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!slugTouched) setSlug(slugify(title));
   }, [title, slugTouched]);
+
+  const onPickImage = async (file: File) => {
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      toast.error("Only JPG, PNG or WEBP images are allowed");
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error("Image must be 5MB or smaller");
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (upErr) throw upErr;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("blog-images")
+        .createSignedUrl(path, IMAGE_SIGN_EXPIRY);
+      if (signErr || !signed) throw signErr ?? new Error("Failed to sign URL");
+      setImageUrl(signed.signedUrl);
+      toast.success("Image uploaded");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const onSave = async () => {
     if (!title.trim()) return toast.error("Title is required");
@@ -288,6 +325,7 @@ function PostEditor({
       excerpt: excerpt.trim() || null,
       author_name: author.trim() || null,
       content_md: content,
+      image_url: imageUrl,
       published,
       published_at:
         published && !initial?.published_at
@@ -363,6 +401,44 @@ function PostEditor({
               </label>
             </Field>
           </div>
+
+          <Field label="Cover image (optional)" hint="JPG, PNG or WEBP · max 5MB">
+            <div className="space-y-3">
+              {imageUrl ? (
+                <div className="relative inline-block">
+                  <img
+                    src={imageUrl}
+                    alt="Cover preview"
+                    className="max-h-48 rounded-lg border border-border object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl(null)}
+                    className="absolute -top-2 -right-2 inline-flex items-center justify-center h-7 w-7 rounded-full bg-destructive text-destructive-foreground text-xs shadow"
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : null}
+              <div>
+                <label className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium cursor-pointer hover:bg-muted transition">
+                  {uploading ? "Uploading…" : imageUrl ? "Replace image" : "Upload image"}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    disabled={uploading}
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) onPickImage(f);
+                      e.target.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          </Field>
 
           <Field label="Excerpt (optional)" hint="Shown on the blog index">
             <textarea
