@@ -93,6 +93,17 @@ function BlogPostPage() {
                 </p>
               ) : null}
 
+              {post.image_url ? (
+                <div className="mt-8 rounded-2xl overflow-hidden border border-border bg-muted">
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              ) : null}
+
+
               <div className="prose prose-neutral dark:prose-invert max-w-none mt-10 prose-headings:font-display prose-a:text-primary">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {post.content_md}
