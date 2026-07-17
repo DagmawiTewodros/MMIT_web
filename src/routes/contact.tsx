@@ -39,7 +39,9 @@ function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    // Capture the form element synchronously — e.currentTarget is null after await.
+    const formEl = e.currentTarget;
+    const fd = new FormData(formEl);
     const parsed = contactSchema.safeParse({
       name: fd.get("name") ?? "",
       email: fd.get("email") ?? "",
@@ -62,7 +64,7 @@ function ContactPage() {
       });
       if (error) throw error;
       setSubmitted(true);
-      e.currentTarget.reset();
+      if (formEl && typeof formEl.reset === "function") formEl.reset();
       toast.success("Message sent");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Could not send your message";
