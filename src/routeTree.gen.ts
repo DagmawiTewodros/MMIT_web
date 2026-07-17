@@ -94,9 +94,9 @@ const ExperienceAssetValuationRoute =
     getParentRoute: () => ExperienceRoute,
   } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/admin/messages',
@@ -231,6 +231,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   AdminBlogRoute: typeof AdminBlogRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
 
@@ -329,10 +330,10 @@ declare module '@tanstack/react-router' {
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/messages': {
       id: '/admin/messages'
@@ -381,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   AdminBlogRoute: AdminBlogRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
