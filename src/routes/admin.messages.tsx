@@ -137,6 +137,12 @@ function AdminMessagesPage() {
             >
               Blog
             </Link>
+            <Link
+              to="/admin/gallery"
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
+            >
+              Gallery
+            </Link>
             <button
               onClick={signOut}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition"
