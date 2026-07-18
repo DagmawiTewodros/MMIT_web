@@ -24,6 +24,7 @@ import { Route as ExperienceConsultancyServicesRouteImport } from './routes/expe
 import { Route as ExperienceAssetValuationRouteImport } from './routes/experience.asset-valuation'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -103,6 +104,11 @@ const AdminMessagesRoute = AdminMessagesRouteImport.update({
   path: '/admin/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminGalleryRoute = AdminGalleryRouteImport.update({
+  id: '/admin/gallery',
+  path: '/admin/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/admin/blog',
   path: '/admin/blog',
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/gallery': typeof AdminGalleryRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/experience/asset-valuation': typeof ExperienceAssetValuationRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/admin/blog'
+    | '/admin/gallery'
     | '/admin/messages'
     | '/blog/$slug'
     | '/experience/asset-valuation'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/admin/blog'
+    | '/admin/gallery'
     | '/admin/messages'
     | '/blog/$slug'
     | '/experience/asset-valuation'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/admin/blog'
+    | '/admin/gallery'
     | '/admin/messages'
     | '/blog/$slug'
     | '/experience/asset-valuation'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   ServicesRoute: typeof ServicesRoute
   AdminBlogRoute: typeof AdminBlogRoute
+  AdminGalleryRoute: typeof AdminGalleryRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -342,6 +355,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/gallery': {
+      id: '/admin/gallery'
+      path: '/admin/gallery'
+      fullPath: '/admin/gallery'
+      preLoaderRoute: typeof AdminGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/blog': {
       id: '/admin/blog'
       path: '/admin/blog'
@@ -381,6 +401,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   ServicesRoute: ServicesRoute,
   AdminBlogRoute: AdminBlogRoute,
+  AdminGalleryRoute: AdminGalleryRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
