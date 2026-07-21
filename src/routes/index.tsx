@@ -3,6 +3,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Compass, GraduationCap, LineChart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteShell } from "@/components/site/SiteShell";
+import galleryHeroA from "@/assets/gallery/hero.jpg";
+import galleryHeroB from "@/assets/gallery/hero2.jpg";
+import galleryHeroC from "@/assets/gallery/hero3.jpg";
 import heroA from "@/assets/mated/hero-new-1.jpg";
 import heroB from "@/assets/mated/hero-new-2.jpg";
 import heroC from "@/assets/mated/hero-new-3.jpg";
@@ -38,6 +41,9 @@ const fadeUp = {
 };
 
 const heroSlides = [
+  { src: galleryHeroA, alt: "MATED institute team" },
+  { src: galleryHeroB, alt: "MATED training session" },
+  { src: galleryHeroC, alt: "MATED professional development event" },
   { src: heroA, alt: "MATED certificate ceremony" },
   { src: heroB, alt: "MATED training graduates" },
   { src: heroC, alt: "MATED training session" },
