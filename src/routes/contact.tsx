@@ -100,9 +100,27 @@ function ContactPage() {
         <div className="container-editorial grid md:grid-cols-12 gap-12">
           <div className="md:col-span-5 space-y-8">
             {[
-              { icon: Phone, label: "Phone", value: "+251-118-333536" },
-              { icon: Mail, label: "Email", value: "info@matedinstitute.com" },
-              { icon: MapPin, label: "Address", value: "P.O. Box 9885, Addis Ababa, Ethiopia" },
+              {
+                icon: MapPin,
+                label: "Head Office",
+                value:
+                  "Kazanchis, Palace Commercial Center, 3rd Floor, Office #311\nP.O. Box 9885, Addis Ababa, Ethiopia",
+              },
+              {
+                icon: Phone,
+                label: "Telephone",
+                value: "+251 97 281 8181\n+251 97 724 4434",
+              },
+              {
+                icon: Mail,
+                label: "Email",
+                value: "matedtcplc@gmail.com",
+              },
+              {
+                icon: Mail,
+                label: "Website",
+                value: "https://matedinstitute.com",
+              },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex gap-4">
                 <div className="h-10 w-10 rounded-md bg-accent/15 text-accent grid place-items-center shrink-0">
@@ -112,7 +130,7 @@ function ContactPage() {
                   <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {label}
                   </div>
-                  <div className="mt-1 text-base">{value}</div>
+                  <div className="mt-1 text-base whitespace-pre-line">{value}</div>
                 </div>
               </div>
             ))}
@@ -122,10 +140,11 @@ function ContactPage() {
                 Office hours
               </div>
               <div className="text-sm text-foreground/80">
-                Monday — Friday · 8:30 — 17:30 EAT
+                Monday — Friday · 8:30 AM — 5:30 PM EAT
               </div>
             </div>
           </div>
+
 
           <div className="md:col-span-7">
             <form
