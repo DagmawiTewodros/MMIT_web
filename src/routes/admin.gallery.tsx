@@ -329,7 +329,7 @@ function AdminGalleryPage() {
                       <img src={edit.previewUrl} alt="Preview" className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                       <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                        <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "#ff6b35" }}>
+                        <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "#1C2841" }}>
                           {edit.category || "Gallery"}
                         </p>
                         <h3 className="font-display text-base font-semibold leading-tight">{edit.title || "Untitled"}</h3>

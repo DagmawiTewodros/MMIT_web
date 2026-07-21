@@ -11,7 +11,7 @@ import minda from "@/assets/gallery/training-minda.jpg";
 import certCeremony from "@/assets/gallery/certification-ceremony.jpg";
 import assetField from "@/assets/gallery/asset-valuation-fieldwork.jpg";
 
-const ORANGE = "#ff6b35";
+const ORANGE = "#1C2841";
 
 type Item = {
   id: string;

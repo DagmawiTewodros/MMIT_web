@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site/SiteShell";
 
-const ORANGE = "#ff6b35";
+const ORANGE = "#1C2841";
 const DARK_RED = "#b71c1c";
 
 export type ClientEntry = {
