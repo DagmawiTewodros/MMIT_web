@@ -226,6 +226,16 @@
   }
 }
 
+.experience-expanded-heading,
+.experience-expanded-heading * {
+  color: color-mix(in oklab, var(--color-foreground) 60%, transparent) !important;
+}
+
+.dark .experience-expanded-heading,
+.dark .experience-expanded-heading * {
+  color: #ffffff !important;
+}
+
 @layer utilities {
   @keyframes marquee {
     from {

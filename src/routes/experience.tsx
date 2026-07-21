@@ -4,7 +4,6 @@ import {
   BarChart2,
   Monitor,
   TrendingUp,
-  PieChart,
   ThumbsUp,
   Smartphone,
   ChevronDown,
@@ -53,8 +52,8 @@ type Experience = {
 const experiences: Experience[] = [
   {
     Icon: BarChart2,
-    title: "IFRS for SMEs consultancy Services",
-    desc: "Specialized International Financial Reporting Standards implementation for small and medium enterprises. Our experts guide you through seamless transition to IFRS compliance, ensuring accurate financial reporting and enhanced stakeholder confidence.",
+    title: "Full IFRS and IFRS for SMEs consultancy Services",
+    desc: "End-to-end IFRS advisory for organizations and SMEs, covering gap assessment, conversion, accounting policy design, implementation, financial statement preparation, ongoing compliance and staff capacity building. For small and medium enterprises, we tailor a seamless transition that supports accurate reporting and stronger stakeholder confidence.",
     clients: ifrsClients,
   },
   {
@@ -68,12 +67,6 @@ const experiences: Experience[] = [
     title: "IPSAS Consultancy Services",
     desc: "Expert International Public Sector Accounting Standards implementation for government entities and public sector organizations. We ensure compliance, improve transparency, and enhance public financial management through our specialized consultancy services.",
     clients: ipsasClients,
-  },
-  {
-    Icon: PieChart,
-    title: "Full IFRS Consultancy Service",
-    desc: "End-to-end IFRS advisory covering gap assessment, conversion, implementation and ongoing compliance. Our specialists help organizations adopt full IFRS with confidence — from accounting policy design to financial statement preparation and staff capacity building.",
-    clients: ifrsClients,
   },
   {
     Icon: ThumbsUp,
@@ -164,10 +157,7 @@ function ExperiencePage() {
                       aria-labelledby={`experience-trigger-${idx}`}
                       className="mt-6 pt-6 border-t border-border text-left animate-fade-in"
                     >
-                      <h4
-                        className="font-display font-semibold mb-4 text-center"
-                        style={{ color: DARK_RED }}
-                      >
+                      <h4 className="experience-expanded-heading font-display font-semibold mb-4 text-center">
                         Selected Clients
                       </h4>
                       <ul className="space-y-4 max-h-[420px] overflow-y-auto pr-2">
@@ -182,7 +172,7 @@ function ExperiencePage() {
                               aria-hidden="true"
                             />
                             <div className="relative z-10 min-w-0 flex-1">
-                              <p className="text-sm font-semibold" style={{ color: DARK_RED }}>
+                              <p className="experience-expanded-heading text-sm font-semibold">
                                 {c.website ? (
                                   <a
                                     href={c.website}
