@@ -22,10 +22,12 @@ export function Footer() {
               Contact
             </div>
             <ul className="space-y-2 text-sm text-primary-foreground/85">
-              <li>+251-118-333536</li>
-              <li>info@matedinstitute.com</li>
-              <li>P.O. Box 9885</li>
-              <li>Addis Ababa, Ethiopia</li>
+              <li>+251 97 281 8181</li>
+              <li>+251 97 724 4434</li>
+              <li>matedtcplc@gmail.com</li>
+              <li>Kazanchis, Palace Commercial Center</li>
+              <li>3rd Floor, Office #311</li>
+              <li>P.O. Box 9885, Addis Ababa, Ethiopia</li>
             </ul>
           </div>
 
@@ -34,15 +36,29 @@ export function Footer() {
               Explore
             </div>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="hover:text-accent">About</Link></li>
-              <li><Link to="/services" className="hover:text-accent">Services</Link></li>
-              <li><Link to="/contact" className="hover:text-accent">Contact</Link></li>
+              <li>
+                <Link to="/about" className="hover:text-accent">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/services" className="hover:text-accent">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-accent">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-16 pt-8 border-t border-primary-foreground/15 flex flex-col md:flex-row gap-4 justify-between text-xs text-primary-foreground/60">
-          <div>© {new Date().getFullYear()} MATED Consulting & Training PLC. All rights reserved.</div>
+          <div>
+            © {new Date().getFullYear()} MATED Consulting & Training PLC. All rights reserved.
+          </div>
           <div>Delivering Value.</div>
         </div>
       </div>
