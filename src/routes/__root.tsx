@@ -1,6 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
-import socialPreview from "@/assets/mated/social-preview.png";
+import socialPreview from "@/assets/mated/sourse-pre.png";
 
 import appCss from "../styles.css?url";
 
