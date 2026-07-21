@@ -141,7 +141,7 @@ function Index() {
       <section className="border-y border-border bg-secondary/40">
         <div className="container-editorial py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            ["500+", "Professionals trained"],
+            ["50K+", "Professionals trained"],
             ["120+", "Engagements delivered"],
             ["40+", "Public & private partners"],
             ["15+", "Years of practice"],

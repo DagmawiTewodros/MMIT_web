@@ -69,8 +69,8 @@ const experiences: Experience[] = [
   },
   {
     Icon: PieChart,
-    title: "Consultancy Services Offered",
-    desc: "Strategic business advisory services covering financial management, operational efficiency, and organizational development. Our tailored solutions address unique challenges and drive sustainable growth for your organization.",
+    title: "Full IFRS Consultancy Service",
+    desc: "End-to-end IFRS advisory covering gap assessment, conversion, implementation and ongoing compliance. Our specialists help organizations adopt full IFRS with confidence — from accounting policy design to financial statement preparation and staff capacity building.",
     clients: ifrsClients,
   },
   {
