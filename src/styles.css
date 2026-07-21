@@ -226,46 +226,6 @@
   }
 }
 
-.services-consultation-cta {
-  background-color: #ffffff !important;
-  color: #1c2841 !important;
-}
-
-.services-consultation-heading {
-  color: #1c2841 !important;
-}
-
-.services-consultation-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2.5rem;
-  padding: 0.875rem 1.75rem;
-  border-radius: 9999px;
-  background-color: #f7941d !important;
-  color: #1c2841 !important;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-  box-shadow: 0 8px 20px rgb(247 148 29 / 20%);
-  transition:
-    background-color 200ms ease,
-    box-shadow 200ms ease,
-    transform 200ms ease;
-}
-
-.services-consultation-button:hover {
-  background-color: #e98712 !important;
-  color: #1c2841 !important;
-  box-shadow: 0 10px 24px rgb(247 148 29 / 30%);
-  transform: translateY(-2px);
-}
-
-.services-consultation-button:focus-visible {
-  outline: 3px solid rgb(28 40 65 / 35%);
-  outline-offset: 3px;
-}
-
 @layer utilities {
   @keyframes marquee {
     from {

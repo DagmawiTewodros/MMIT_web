@@ -1,7 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   appliedResearchTopics,
   consultancyServiceGroups,
@@ -30,29 +35,35 @@ export const Route = createFileRoute("/services")({
 
 function ServiceCatalog({ groups }: { groups: ServiceGroup[] }) {
   return (
-    <div className="divide-y divide-border border-y border-border">
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={groups[0]?.title}
+      className="divide-y divide-border border-y border-border"
+    >
       {groups.map((group, index) => (
-        <details key={group.title} className="group py-1" open={index === 0}>
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left [&::-webkit-details-marker]:hidden">
-            <div className="flex items-baseline gap-4">
+        <AccordionItem key={group.title} value={group.title} className="border-0 py-1">
+          <AccordionTrigger className="gap-6 py-5 hover:no-underline [&>svg]:h-5 [&>svg]:w-5 [&>svg]:duration-300">
+            <span className="flex items-baseline gap-4">
               <span className="text-xs tabular-nums text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <h3 className="font-display text-xl font-semibold md:text-2xl">{group.title}</h3>
-            </div>
-            <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180" />
-          </summary>
-          <ul className="grid gap-x-10 gap-y-3 pb-7 pl-10 sm:grid-cols-2">
-            {group.topics.map((topic) => (
-              <li key={topic} className="flex gap-3 text-sm leading-relaxed text-foreground/80">
-                <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#F7941D]" />
-                {topic}
-              </li>
-            ))}
-          </ul>
-        </details>
+              <span className="font-display text-xl font-semibold md:text-2xl">{group.title}</span>
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="pb-7 pl-10">
+            <ul className="grid gap-x-10 gap-y-3 sm:grid-cols-2">
+              {group.topics.map((topic) => (
+                <li key={topic} className="flex gap-3 text-sm leading-relaxed text-foreground/80">
+                  <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#F7941D]" />
+                  {topic}
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }
 
@@ -197,17 +208,6 @@ function ServicesPage() {
               ))}
             </ul>
           </div>
-        </div>
-      </section>
-
-      <section className="services-consultation-cta border-t border-border py-24 md:py-32">
-        <div className="container-editorial text-center">
-          <h2 className="services-consultation-heading mx-auto max-w-2xl text-balance font-display text-4xl leading-tight md:text-5xl">
-            Tell us about the outcome you need.
-          </h2>
-          <Link to="/contact" className="services-consultation-button">
-            Request a consultation <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </div>
       </section>
     </SiteShell>

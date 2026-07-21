@@ -135,12 +135,16 @@ function ExperiencePage() {
                     <button
                       type="button"
                       onClick={() => setOpenIndex(isOpen ? null : idx)}
+                      id={`experience-trigger-${idx}`}
+                      aria-expanded={isOpen}
+                      aria-controls={`experience-panel-${idx}`}
                       className="inline-flex items-center gap-1 font-medium transition-colors"
                       style={{ color: isOpen ? DARK_RED : ORANGE }}
                     >
                       {isOpen ? "Show Less" : "Read More"}
                       <ChevronDown
                         className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                        aria-hidden="true"
                       />
                     </button>
                   ) : (
@@ -154,7 +158,12 @@ function ExperiencePage() {
                   )}
 
                   {clients && isOpen && (
-                    <div className="mt-6 pt-6 border-t border-border text-left animate-fade-in">
+                    <div
+                      id={`experience-panel-${idx}`}
+                      role="region"
+                      aria-labelledby={`experience-trigger-${idx}`}
+                      className="mt-6 pt-6 border-t border-border text-left animate-fade-in"
+                    >
                       <h4
                         className="font-display font-semibold mb-4 text-center"
                         style={{ color: DARK_RED }}
