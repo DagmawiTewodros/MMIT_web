@@ -20,6 +20,13 @@ import partnerElili from "@/assets/mated/partner-elili.jpg";
 import partnerFamily from "@/assets/mated/partner-family.jpg";
 import partnerTirett from "@/assets/mated/partner-tirett.jpg";
 import partnerPulp from "@/assets/mated/partner-pulp.png";
+import partnerKuriftu from "@/assets/gallery/kuriftu.png";
+import partnerMeqrez from "@/assets/gallery/meqrez.png";
+import partnerHallelujah from "@/assets/gallery/hallelujah.jpg";
+import partnerFlintstone from "@/assets/gallery/flintstone.png";
+import partnerAwatch from "@/assets/gallery/awatch.jpg";
+import partnerBoston from "@/assets/gallery/boston partner.png";
+import partnerStGebriel from "@/assets/gallery/st. gebriel.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -47,6 +54,22 @@ const heroSlides = [
   { src: heroA, alt: "MATED certificate ceremony" },
   { src: heroB, alt: "MATED training graduates" },
   { src: heroC, alt: "MATED training session" },
+];
+
+const partners = [
+  [partnerChamber, "Addis Ababa Chamber of Commerce"],
+  [partnerAirports, "Ethiopian Airports Enterprise"],
+  [partnerElili, "Elili Hotel"],
+  [partnerFamily, "Ethiopian Family"],
+  [partnerTirett, "Tirett"],
+  [partnerPulp, "Ethiopian Paper and Pulp"],
+  [partnerKuriftu, "Kuriftu"],
+  [partnerMeqrez, "Meqrez"],
+  [partnerHallelujah, "Hallelujah"],
+  [partnerFlintstone, "Flintstone"],
+  [partnerAwatch, "Awatch"],
+  [partnerBoston, "Boston Partner"],
+  [partnerStGebriel, "St. Gebriel"],
 ];
 
 function Index() {
@@ -297,23 +320,7 @@ function Index() {
             }}
           >
             <div className="flex w-max animate-marquee gap-12 md:gap-20 items-center group-hover:[animation-play-state:paused]">
-              {[
-                [partnerChamber, "Addis Ababa Chamber of Commerce"],
-                [partnerAirports, "Ethiopian Airports Enterprise"],
-                [partnerElili, "Elili Hotel"],
-                [partnerFamily, "Ethiopian Family"],
-                [partnerTirett, "Tirett"],
-                [partnerPulp, "Ethiopian Paper and Pulp"],
-              ]
-                .concat([
-                  [partnerChamber, "Addis Ababa Chamber of Commerce"],
-                  [partnerAirports, "Ethiopian Airports Enterprise"],
-                  [partnerElili, "Elili Hotel"],
-                  [partnerFamily, "Ethiopian Family"],
-                  [partnerTirett, "Tirett"],
-                  [partnerPulp, "Ethiopian Paper and Pulp"],
-                ])
-                .map(([src, alt], i) => (
+              {[...partners, ...partners].map(([src, alt], i) => (
                   <div
                     key={`${alt}-${i}`}
                     className="flex items-center justify-center shrink-0"
