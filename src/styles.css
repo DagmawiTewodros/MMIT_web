@@ -45,8 +45,8 @@
   --radius: 0.5rem;
 
   /* Original MATED palette: white bg, navy ink, red primary, amber accent */
-  --background: oklch(1 0 0);                   /* white */
-  --foreground: oklch(0.22 0.04 255);           /* deep navy text */
+  --background: oklch(1 0 0); /* white */
+  --foreground: oklch(0.22 0.04 255); /* deep navy text */
   --ink: oklch(0.22 0.04 255);
   --cream: oklch(0.985 0.005 250);
 
@@ -63,7 +63,7 @@
   --secondary-foreground: oklch(0.22 0.04 255);
 
   --muted: oklch(0.965 0.005 250);
-  --muted-foreground: oklch(0.50 0.02 255);
+  --muted-foreground: oklch(0.5 0.02 255);
 
   /* Accent = deep navy #1C2841 */
   --accent: oklch(0.26 0.04 260);
@@ -81,21 +81,21 @@
   --background: oklch(0.16 0.02 255);
   --foreground: oklch(0.96 0.01 250);
   --ink: oklch(0.96 0.01 250);
-  --cream: oklch(0.20 0.02 255);
+  --cream: oklch(0.2 0.02 255);
 
-  --card: oklch(0.20 0.02 255);
+  --card: oklch(0.2 0.02 255);
   --card-foreground: oklch(0.96 0.01 250);
-  --popover: oklch(0.20 0.02 255);
+  --popover: oklch(0.2 0.02 255);
   --popover-foreground: oklch(0.96 0.01 250);
 
-  --primary: oklch(0.40 0.05 260);
+  --primary: oklch(0.4 0.05 260);
   --primary-foreground: oklch(1 0 0);
 
   --secondary: oklch(0.24 0.02 255);
   --secondary-foreground: oklch(0.96 0.01 250);
 
   --muted: oklch(0.24 0.02 255);
-  --muted-foreground: oklch(0.70 0.02 250);
+  --muted-foreground: oklch(0.7 0.02 250);
 
   --accent: oklch(0.55 0.06 260);
   --accent-foreground: oklch(1 0 0);
@@ -103,15 +103,19 @@
   --destructive: oklch(0.62 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --border: oklch(0.30 0.02 255);
-  --input: oklch(0.30 0.02 255);
-  --ring: oklch(0.40 0.05 260);
+  --border: oklch(0.3 0.02 255);
+  --input: oklch(0.3 0.02 255);
+  --ring: oklch(0.4 0.05 260);
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+  }
 
   body {
     background-color: var(--color-background);
@@ -121,7 +125,10 @@
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.025em;
@@ -129,22 +136,43 @@
 }
 
 @layer utilities {
-  .font-display { font-family: var(--font-display); }
+  .font-display {
+    font-family: var(--font-display);
+  }
   .container-editorial {
     max-width: 1280px;
     margin-inline: auto;
     padding-inline: 1.5rem;
   }
   @media (min-width: 768px) {
-    .container-editorial { padding-inline: 3rem; }
+    .container-editorial {
+      padding-inline: 3rem;
+    }
   }
-  .text-balance { text-wrap: balance; }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .client-hover-sweep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(90deg, oklch(0.94 0.015 255), oklch(0.97 0.008 255));
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 350ms ease;
+    pointer-events: none;
+  }
+  .client-hover-sweep:hover::before {
+    transform: scaleX(1);
+  }
   .grain {
     position: relative;
   }
   .grain::after {
     content: "";
-    position: absolute; inset: 0;
+    position: absolute;
+    inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
     opacity: 0.06;
     pointer-events: none;
@@ -154,8 +182,12 @@
 
 @layer utilities {
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
   .animate-marquee {
     animation: marquee 30s linear infinite;

@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExperienceDetailPage } from "@/components/site/ExperienceDetailPage";
-import { ifrsClients } from "@/data/experienceClients";
+import { generalClients } from "@/data/experienceClients";
 
 export const Route = createFileRoute("/experience/training")({
   component: () => (
     <ExperienceDetailPage
       title="Training — IFRS, IPSAS, Asset Valuation & Others"
-      clients={ifrsClients}
+      clients={generalClients}
     />
   ),
   head: () => ({

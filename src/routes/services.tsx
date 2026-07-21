@@ -4,8 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
-import researchAsset from "@/assets/mated/research-fieldwork.jpg.asset.json";
-const research = researchAsset.url;
+import research from "@/assets/mated/consulting-3.jpg";
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -27,8 +26,7 @@ const services = [
   {
     title: "Consultancy",
     img: consulting,
-    lead:
-      "Industry-focused advisory for public and private clients navigating complex strategic, financial and operational decisions.",
+    lead: "Industry-focused advisory for public and private clients navigating complex strategic, financial and operational decisions.",
     items: [
       "Strategy & business planning",
       "Financial advisory & restructuring",
@@ -40,8 +38,7 @@ const services = [
   {
     title: "Training & Capacity Development",
     img: training,
-    lead:
-      "Practical programs that build the leadership and technical capabilities institutions need to perform.",
+    lead: "Practical programs that build the leadership and technical capabilities institutions need to perform.",
     items: [
       "Executive & leadership development",
       "Finance, accounting and audit training",
@@ -53,8 +50,7 @@ const services = [
   {
     title: "Applied Research",
     img: research,
-    lead:
-      "Evidence and analysis that translates directly into better policy and management decisions.",
+    lead: "Evidence and analysis that translates directly into better policy and management decisions.",
     items: [
       "Sector & market studies",
       "Policy and impact research",
@@ -112,9 +108,7 @@ function ServicesPage() {
                 <h2 className="font-display text-4xl md:text-5xl leading-tight text-balance">
                   {s.title}
                 </h2>
-                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
-                  {s.lead}
-                </p>
+                <p className="mt-5 text-lg text-muted-foreground leading-relaxed">{s.lead}</p>
                 <ul className="mt-8 grid sm:grid-cols-2 gap-x-6 gap-y-3">
                   {s.items.map((it) => (
                     <li key={it} className="flex gap-3 text-sm">

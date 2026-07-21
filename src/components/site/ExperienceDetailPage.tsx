@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
 
 const ORANGE = "#1C2841";
@@ -7,7 +8,6 @@ const DARK_RED = "#b71c1c";
 export type ClientEntry = {
   name: string;
   description: string;
-  logo?: string;
   website?: string;
 };
 
@@ -36,10 +36,7 @@ export function ExperienceDetailPage({
   return (
     <SiteShell>
       {/* Page header */}
-      <section
-        className="pt-32 md:pt-40 pb-12 md:pb-16"
-        style={{ background: "#f9f9f9" }}
-      >
+      <section className="pt-32 md:pt-40 pb-12 md:pb-16" style={{ background: "#f9f9f9" }}>
         <div className="container-editorial text-center">
           <h6
             className="text-xs uppercase tracking-[0.25em] font-medium mb-3"
@@ -47,13 +44,15 @@ export function ExperienceDetailPage({
           >
             Delivering Value!
           </h6>
-          <h1 className="font-display text-3xl md:text-5xl font-semibold mb-4">
-            {title}
-          </h1>
+          <h1 className="font-display text-3xl md:text-5xl font-semibold mb-4">{title}</h1>
           <p className="text-sm text-muted-foreground">
-            <Link to="/" className="hover:underline">Home</Link>
+            <Link to="/" className="hover:underline">
+              Home
+            </Link>
             <span className="mx-2">–</span>
-            <Link to="/experience" className="hover:underline">Experience</Link>
+            <Link to="/experience" className="hover:underline">
+              Experience
+            </Link>
             <span className="mx-2">–</span>
             <span>{title}</span>
           </p>
@@ -71,8 +70,7 @@ export function ExperienceDetailPage({
               Delivering Value!
             </h6>
             <h2 className="font-display text-3xl md:text-4xl font-semibold mb-6">
-              Consultancy & Training{" "}
-              <span style={{ color: ORANGE }}>Experience</span>
+              Consultancy & Training <span style={{ color: ORANGE }}>Experience</span>
             </h2>
           </div>
 
@@ -80,17 +78,16 @@ export function ExperienceDetailPage({
             <p>
               {intro ??
                 "The consultancy service is ideally conducted by a team of professional consultants who are expected to demonstrate strong credentials in IFRS implementation in various industries. The consulting firm has already undertaken consultancy service and advisory assignments for various industries. Clients will get a continued service without impersonal attitude beyond a commercial relationship."}{" "}
-              <strong>MATED Management and Research Institute (MMRI)</strong>{" "}
-              provides the full range of consulting and training services.
+              <strong>MATED Management and Research Institute (MMRI)</strong> provides the full
+              range of consulting and training services.
             </p>
             <p>
-              To partners advocate a continuous staff professional development
-              program to ensure the high professional caliber of its staff is
-              maintained. The institute will promote its staff by encouraging
-              them to participate in training programs including those of
-              international so that gets certified including the owners. The
-              following are some of the lists of clients to which the institute
-              delivered both trainings and consulting services.
+              To partners advocate a continuous staff professional development program to ensure the
+              high professional caliber of its staff is maintained. The institute will promote its
+              staff by encouraging them to participate in training programs including those of
+              international so that gets certified including the owners. The following are some of
+              the lists of clients to which the institute delivered both trainings and consulting
+              services.
             </p>
           </div>
 
@@ -99,32 +96,15 @@ export function ExperienceDetailPage({
             {clients.map((c, idx) => (
               <article
                 key={`${c.name}-${idx}`}
-                className="bg-white rounded-lg p-6 transition-all duration-300 hover:-translate-y-[6px]"
-                style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.06)" }}
+                className="client-hover-sweep group relative overflow-hidden rounded-lg border border-transparent bg-white p-6 shadow-[0_5px_15px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#1C2841]/20 hover:shadow-[0_14px_32px_rgba(28,40,65,0.16)]"
               >
-                {c.logo && (
-                  <div className="h-32 flex items-center justify-center mb-5 bg-[#f9f9f9] rounded">
-                    {c.website ? (
-                      <a href={c.website} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src={c.logo}
-                          alt={c.name}
-                          className="max-h-28 max-w-full object-contain"
-                          loading="lazy"
-                        />
-                      </a>
-                    ) : (
-                      <img
-                        src={c.logo}
-                        alt={c.name}
-                        className="max-h-28 max-w-full object-contain"
-                        loading="lazy"
-                      />
-                    )}
-                  </div>
-                )}
+                <ArrowRight
+                  className="relative z-10 mb-5 h-8 w-8 transition-transform duration-200 group-hover:translate-x-2 group-hover:scale-110"
+                  style={{ color: ORANGE }}
+                  aria-hidden="true"
+                />
                 <h3
-                  className="font-display text-lg font-semibold mb-3"
+                  className="relative z-10 mb-3 font-display text-lg font-semibold"
                   style={{ color: DARK_RED }}
                 >
                   {c.website ? (
@@ -140,7 +120,7 @@ export function ExperienceDetailPage({
                     c.name
                   )}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#666" }}>
+                <p className="relative z-10 text-sm leading-relaxed" style={{ color: "#666" }}>
                   {c.description}
                 </p>
               </article>
@@ -160,14 +140,12 @@ export function ExperienceDetailPage({
               Delivering Value!
             </h6>
             <h2 className="font-display text-3xl md:text-4xl font-semibold">
-              Client Service{" "}
-              <span style={{ color: ORANGE }}>Standards</span>
+              Client Service <span style={{ color: ORANGE }}>Standards</span>
             </h2>
           </div>
           <p className="max-w-3xl mx-auto text-center text-foreground/75 mb-10">
-            We have a rigorous set of client service standards. These standards
-            are followed throughout the firm to ensure quality service to all
-            our clients.
+            We have a rigorous set of client service standards. These standards are followed
+            throughout the firm to ensure quality service to all our clients.
           </p>
           <ul className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
             {STANDARDS.map((s, i) => (
@@ -176,10 +154,7 @@ export function ExperienceDetailPage({
                 className="bg-white rounded-md p-5 text-sm leading-relaxed text-foreground/80"
                 style={{ boxShadow: "0 3px 10px rgba(0,0,0,0.04)" }}
               >
-                <span
-                  className="inline-block mr-2 font-semibold"
-                  style={{ color: ORANGE }}
-                >
+                <span className="inline-block mr-2 font-semibold" style={{ color: ORANGE }}>
                   {String(i + 1).padStart(2, "0")}.
                 </span>
                 {s}

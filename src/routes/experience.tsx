@@ -8,12 +8,14 @@ import {
   ThumbsUp,
   Smartphone,
   ChevronDown,
+  ArrowRight,
 } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
 import {
   ifrsClients,
   ipsasClients,
   assetValuationClients,
+  generalClients,
 } from "@/data/experienceClients";
 import type { ClientEntry } from "@/components/site/ExperienceDetailPage";
 
@@ -59,7 +61,7 @@ const experiences: Experience[] = [
     Icon: Monitor,
     title: "Training- IFRS, IPSAS, Asset Valuation & Others",
     desc: "Comprehensive professional training programs designed to build expertise in financial reporting standards. Our hands-on workshops and certification courses empower finance professionals with practical skills and industry knowledge.",
-    clients: ifrsClients,
+    clients: generalClients,
   },
   {
     Icon: TrendingUp,
@@ -135,9 +137,7 @@ function ExperiencePage() {
                   {clients ? (
                     <button
                       type="button"
-                      onClick={() =>
-                        setOpenIndex(isOpen ? null : idx)
-                      }
+                      onClick={() => setOpenIndex(isOpen ? null : idx)}
                       className="inline-flex items-center gap-1 font-medium transition-colors"
                       style={{ color: isOpen ? DARK_RED : ORANGE }}
                     >
@@ -168,23 +168,15 @@ function ExperiencePage() {
                         {clients.map((c, i) => (
                           <li
                             key={`${c.name}-${i}`}
-                            className="flex gap-3 items-start"
+                            className="client-hover-sweep group relative flex overflow-hidden rounded-md border border-transparent px-2 py-1.5 transition-all duration-300 hover:translate-x-1 hover:border-border hover:shadow-sm"
                           >
-                            {c.logo && (
-                              <div className="h-12 w-12 flex-shrink-0 bg-[#f9f9f9] dark:bg-muted rounded flex items-center justify-center overflow-hidden">
-                                <img
-                                  src={c.logo}
-                                  alt={c.name}
-                                  className="max-h-10 max-w-10 object-contain"
-                                  loading="lazy"
-                                />
-                              </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <p
-                                className="text-sm font-semibold"
-                                style={{ color: DARK_RED }}
-                              >
+                            <ArrowRight
+                              className="relative z-10 mt-0.5 h-5 w-5 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-1 group-hover:scale-110"
+                              style={{ color: ORANGE }}
+                              aria-hidden="true"
+                            />
+                            <div className="relative z-10 min-w-0 flex-1">
+                              <p className="text-sm font-semibold" style={{ color: DARK_RED }}>
                                 {c.website ? (
                                   <a
                                     href={c.website}
