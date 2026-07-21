@@ -37,7 +37,7 @@ export const Route = createFileRoute("/experience")({
   }),
 });
 
-const ORANGE = "#ff6b35";
+const ORANGE = "#1C2841";
 const DARK_RED = "#b71c1c";
 
 type Experience = {
