@@ -11,7 +11,7 @@ import heroB from "@/assets/mated/hero-new-2.jpg";
 import heroC from "@/assets/mated/hero-new-3.jpg";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
-import research from "@/assets/mated/consulting-3.jpg";
+import research from "@/assets/gallery/research.jpg";
 import approachA from "@/assets/mated/consulting-2.jpg";
 import approachB from "@/assets/mated/approach-group.jpg";
 import partnerChamber from "@/assets/mated/partner-chamber.jpg";
