@@ -90,8 +90,8 @@ function ContactPage() {
             Let's start a conversation.
           </motion.h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            Tell us a little about your organization and what you'd like to achieve.
-            We'll be in touch within two business days.
+            Tell us a little about your organization and what you'd like to achieve. We'll be in
+            touch within two business days.
           </p>
         </div>
       </section>
@@ -110,11 +110,6 @@ function ContactPage() {
                 icon: Phone,
                 label: "Telephone",
                 value: "+251 97 281 8181\n+251 97 724 4434",
-              },
-              {
-                icon: Mail,
-                label: "Email",
-                value: "matedtcplc@gmail.com",
               },
               {
                 icon: Mail,
@@ -144,7 +139,6 @@ function ContactPage() {
               </div>
             </div>
           </div>
-
 
           <div className="md:col-span-7">
             <form

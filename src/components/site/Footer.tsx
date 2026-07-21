@@ -24,7 +24,6 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-primary-foreground/85">
               <li>+251 97 281 8181</li>
               <li>+251 97 724 4434</li>
-              <li>matedtcplc@gmail.com</li>
               <li>Kazanchis, Palace Commercial Center</li>
               <li>3rd Floor, Office #311</li>
               <li>P.O. Box 9885, Addis Ababa, Ethiopia</li>
