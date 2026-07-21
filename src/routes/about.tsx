@@ -44,20 +44,17 @@ function AboutPage() {
       <section className="pb-24 md:pb-32">
         <div className="container-editorial max-w-3xl space-y-6 text-lg leading-relaxed text-foreground/85">
           <p>
-            MATED Consulting & Training PLC was founded to bring rigor, clarity and
-            local insight to the institutions shaping Ethiopia's economy. From our
-            base in Addis Ababa we serve government, non-governmental and private
-            clients across the country.
+            MATED Consulting & Training PLC was founded to bring rigor, clarity and local insight to
+            the institutions shaping Ethiopia's economy. From our base in Addis Ababa we serve
+            government, non-governmental and private clients across the country.
           </p>
           <p>
-            Our work spans strategy, finance, auditing, taxation, information
-            technology and other business-related disciplines. What unites it is a
-            simple commitment: every recommendation we make is one we would be
-            willing to implement ourselves.
+            Our work spans strategy, finance, auditing, taxation, information technology and other
+            business-related disciplines. What unites it is a simple commitment: every
+            recommendation we make is one we would be willing to implement ourselves.
           </p>
           <p>
-            We measure success the way our clients do — by what changes after we
-            leave the room.
+            We measure success the way our clients do — by what changes after we leave the room.
           </p>
         </div>
       </section>
@@ -94,7 +91,12 @@ function AboutPage() {
           <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto mb-16 border-t border-border pt-10">
             {[
               { name: "Tewodros Endale", role: "CEO", img: ceoImg, anchor: "tewodros" },
-              { name: "Wogayehu W/Yesus", role: "Deputy CEO", img: deputyCeoImg, anchor: "wogayehu" },
+              {
+                name: "Wogayehu W/Yesus",
+                role: "Deputy CEO",
+                img: deputyCeoImg,
+                anchor: "wogayehu",
+              },
             ].map((p) => (
               <div key={p.name} className="flex items-center gap-5">
                 <img
@@ -104,9 +106,7 @@ function AboutPage() {
                   className="h-16 w-16 rounded-full object-cover object-top border border-border"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="font-display text-lg font-semibold leading-tight">
-                    {p.name}
-                  </div>
+                  <div className="font-display text-lg font-semibold leading-tight">{p.name}</div>
                   <div className="text-sm text-muted-foreground">{p.role}</div>
                 </div>
                 <a
@@ -124,7 +124,7 @@ function AboutPage() {
               {
                 name: "Tewodros Endale",
                 role: "Chief Executive Officer",
-                bio: "Tewodros leads MATED's strategy and client engagements, drawing on more than two decades of experience advising public and private institutions across Ethiopia.",
+                bio: "Tewodros Endale (MSC, CIFI, FE, CPA and CFI) is the Founder and Chief Executive Officer of MATED Consulting and Training PLC, providing strategic leadership and overseeing client engagements. With over two decades of experience, he advises public and private sector organizations across Ethiopia in management consulting, finance, accounting, auditing, taxation, and organizational development. Renowned for delivering practical, results-driven solutions, he helps organizations strengthen performance, ensure compliance, and achieve sustainable growth.",
                 img: ceoImg,
                 anchor: "tewodros",
               },
