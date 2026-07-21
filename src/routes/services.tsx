@@ -4,7 +4,8 @@ import { ArrowUpRight } from "lucide-react";
 import { SiteShell } from "@/components/site/SiteShell";
 import consulting from "@/assets/mated/consulting-1.jpg";
 import training from "@/assets/mated/training-1.jpg";
-import research from "@/assets/mated/consulting-3.jpg";
+import researchAsset from "@/assets/mated/research-fieldwork.jpg.asset.json";
+const research = researchAsset.url;
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
