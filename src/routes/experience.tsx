@@ -126,10 +126,7 @@ function ExperiencePage() {
                     style={{ color: ORANGE, width: "2.5rem", height: "2.5rem" }}
                     strokeWidth={1.75}
                   />
-                  <h3
-                    className="font-display text-[1.2rem] font-semibold mb-[15px]"
-                    style={{ color: DARK_RED }}
-                  >
+                  <h3 className="font-display text-[1.2rem] font-semibold mb-[15px] text-[#b71c1c] dark:text-white">
                     {title}
                   </h3>
                   <p className="mb-5 leading-[1.6] text-foreground/70">{desc}</p>

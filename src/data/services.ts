@@ -1,0 +1,180 @@
+export type ServiceGroup = {
+  title: string;
+  topics: string[];
+};
+
+export const trainingServiceGroups: ServiceGroup[] = [
+  {
+    title: "Executive and Leadership Development",
+    topics: [
+      "Change Management",
+      "Leadership Skills",
+      "Transformational Leadership",
+      "Risk Management",
+      "Corporate Governance",
+      "Decision Making and Problem Solving",
+      "Leadership and Excellence for Executives",
+      "Conflict Resolution Management",
+    ],
+  },
+  {
+    title: "Financial Management and Accounting",
+    topics: [
+      "Basic Accounting",
+      "Budgeting and Cost Control",
+      "Internal Audit and Control",
+      "Rules and Regulations of VAT and Income Tax",
+      "Tax Accounting",
+      "International Taxation",
+      "Cost Accounting",
+      "Taxation in Ethiopia",
+      "Finance for Non-Finance Managers",
+      "International Financial Reporting Standards (IFRS)",
+      "International Financial Reporting Standards (IFRS for SMEs)",
+      "International Public Sector Accounting Standards (IPSAS)",
+      "Business and Property Valuation Financial Management",
+      "Asset Valuation",
+    ],
+  },
+  {
+    title: "Management and Human Resource Development",
+    topics: [
+      "Secretarial Science & Office Operations Management for Executive Secretaries",
+      "Human Resource Management",
+      "Basic Managerial Skills",
+      "Office Operations Management",
+      "Training and Human Resource Development",
+      "Records Management",
+      "Organizational Development",
+      "Innovation Management",
+      "Performance Management",
+      "Employee Performance Management",
+      "Labor Relations Management",
+      "Fixed Asset Management",
+      "Collective Bargaining",
+      "Training of Trainers (TOT)",
+      "Strategic Negotiation and Dispute Resolution Skills",
+      "Performance Audit",
+      "Strategic Planning & Management",
+      "Team Building",
+      "Supervisory Management",
+      "Time and Stress Management",
+      "Quality Management",
+      "Conflict Management",
+      "Tour and Travel Operation Management",
+      "Property and Facility Management",
+      "Balanced Scorecard",
+      "Public Relations",
+      "Kaizen",
+    ],
+  },
+  {
+    title: "International Trade",
+    topics: [
+      "International Trading Incoterms 2010",
+      "Valuation & Commodity Tariff Classification",
+      "International Trade Service & Ethiopian Export/Import Practice",
+      "Customs Procedure",
+      "Multimodal Transport System",
+    ],
+  },
+  {
+    title: "Marketing and Customer Service",
+    topics: [
+      "Strategic Marketing Management",
+      "Hotel and Tourism Marketing Management",
+      "Insurance Marketing",
+      "Marketing Research",
+      "Salesmanship",
+      "Advanced Customer Service",
+      "Service Marketing",
+      "Customer Relationship Management (CRM)",
+      "Product Development and Branding",
+      "Promotion and Advertising",
+    ],
+  },
+  {
+    title: "Project and Program Management",
+    topics: [
+      "Business Plan Preparation",
+      "Project Monitoring and Evaluation",
+      "Production Planning and Controlling",
+    ],
+  },
+  {
+    title: "Logistics and Procurement Management",
+    topics: [
+      "Export Risk Management",
+      "Export Market Development & Promotion",
+      "Logistics Management",
+      "Procurement Management",
+      "Supplies and Materials Management",
+      "Supply Chain Management",
+      "Stores Management",
+    ],
+  },
+  {
+    title: "Communication Skills",
+    topics: ["Business Communication", "Effective Report Writing and Presentation Skills"],
+  },
+];
+
+export const consultancyServiceGroups: ServiceGroup[] = [
+  {
+    title: "Business Advisory and Development",
+    topics: [
+      "Consulting on implementation of International Financial Reporting Standards (Full IFRS)",
+      "Consulting on implementation of International Financial Reporting Standards (IFRS for SMEs)",
+      "Property Valuations",
+      "Consulting & Development of Financial Policy and Procedural Manual",
+      "Consulting & Development of HR Policy and Procedure Manual",
+      "Consulting & Development of Procurement Manual",
+      "Consulting & Development of Property Administration Manual",
+      "Consulting & Development of Records Management Manual",
+      "Consulting & Development of Strategic Plan",
+      "Customer Satisfaction Survey",
+      "Marketing Research",
+      "Job Placement",
+      "Mergers & Acquisitions Advisory (Buy and Sell)",
+      "Modeling and Business Planning",
+      "Organization Structure, Staffing Plan, Job Descriptions, Job Evaluation, Salary Scale, Fringe Benefits and Incentive Schemes",
+      "Project Feasibilities",
+      "Project Finance",
+      "Project Management & Financial Projections",
+      "Public Company Advisory",
+      "Structuring Services",
+      "Quality Management",
+      "Asset Valuation Consulting",
+    ],
+  },
+  {
+    title: "Tax Advisory",
+    topics: [
+      "International Tax Services: Income Tax; Turnover Tax (TOT) and Value Added Tax (VAT)",
+      "Domestic Tax Service: Direct and Indirect Tax Services",
+      "Corporate & Individual Tax Advisory Services",
+      "Compliance",
+      "Tax Valuations",
+    ],
+  },
+  {
+    title: "Human Resources",
+    topics: ["HR Management", "HR Restructuring & Reorganization"],
+  },
+  {
+    title: "Performance Improvement",
+    topics: [
+      "Governance, Risk and Compliance",
+      "Financial Effectiveness",
+      "Corporate Restructuring & Reorganization",
+    ],
+  },
+];
+
+export const appliedResearchTopics = [
+  "Sector and market studies",
+  "Policy and impact research",
+  "Organizational diagnostics",
+  "Data analysis and reporting",
+  "Knowledge products",
+];
