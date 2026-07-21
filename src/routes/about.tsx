@@ -131,7 +131,7 @@ function AboutPage() {
               {
                 name: "Wogayehu W/Yesus",
                 role: "Deputy Chief Executive Officer",
-                bio: "Wogayehu oversees consulting delivery and operations, with deep expertise in financial reporting, IPSAS adoption and capacity-building programs.",
+                bio: "Wogayehu Woldeyesus Debana (MSc, BA, CISI, CFI) is a Lecturer, Trainer, and Consultant, and Head of the Department of Accounting and Finance at Addis Ababa University, School of Commerce, and a Consultancy and Training Partner at MATED Management and Research Institute. With over 22 years of experience, he advises banks, government institutions, NGOs, and private enterprises across Ethiopia in IFRS, auditing, financial management, taxation, and corporate governance. Renowned for his work in capacity building and financial reporting reform, he helps organizations strengthen accountability, transparency, and sustainable performance.",
                 img: deputyCeoImg,
                 anchor: "wogayehu",
               },
