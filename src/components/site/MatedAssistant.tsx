@@ -15,6 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { consultancyServiceGroups, trainingServiceGroups } from "@/data/services";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import ceoImg from "@/assets/mated/ceo.png";
+import deputyCeoImg from "@/assets/mated/deputy-ceo.png";
 
 type ChatMessage = {
   role: "assistant" | "user";

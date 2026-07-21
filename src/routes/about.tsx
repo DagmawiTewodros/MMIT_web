@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { SiteShell } from "@/components/site/SiteShell";
 import hero from "@/assets/mated/hero.jpg";
 import consulting from "@/assets/mated/team.jpg";
-import ceoImg from "@/assets/mated/ceo.jpg";
-import deputyCeoImg from "@/assets/mated/deputy-ceo.jpg";
+import ceoImg from "@/assets/mated/ceo.png";
+import deputyCeoImg from "@/assets/mated/deputy-ceo.png";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
