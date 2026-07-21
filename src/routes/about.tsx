@@ -124,7 +124,7 @@ function AboutPage() {
               {
                 name: "Tewodros Endale",
                 role: "Chief Executive Officer",
-                bio: "Tewodros Endale (MSC, CIFI, FE, CPA and CFI) is the Founder and Chief Executive Officer of MATED Consulting and Training PLC, providing strategic leadership and overseeing client engagements. With over two decades of experience, he advises public and private sector organizations across Ethiopia in management consulting, finance, accounting, auditing, taxation, and organizational development. Renowned for delivering practical, results-driven solutions, he helps organizations strengthen performance, ensure compliance, and achieve sustainable growth.",
+                bio: "Tewodros Endale (MSc, BA, CISI, FE, CPA and CFI) is the Founder and Chief Executive Officer of MATED Consulting and Training PLC, providing strategic leadership and overseeing client engagements. With over two decades of experience, he advises public and private sector organizations across Ethiopia in management consulting, finance, accounting, auditing, taxation, and organizational development. Renowned for delivering practical, results-driven solutions, he helps organizations strengthen performance, ensure compliance, and achieve sustainable growth.",
                 img: ceoImg,
                 anchor: "tewodros",
               },
