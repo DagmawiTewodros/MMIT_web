@@ -104,7 +104,7 @@ function ContactPage() {
                 icon: MapPin,
                 label: "Head Office",
                 value:
-                  "Kazanchis, Palace Commercial Center, 3rd Floor, Office #311\nP.O. Box 9885, Addis Ababa, Ethiopia",
+                  "Kazanchis, Palace Commercial Center, 3rd Floor, Office #311, Addis Ababa, Ethiopia",
               },
               {
                 icon: Phone,

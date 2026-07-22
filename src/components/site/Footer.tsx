@@ -41,7 +41,7 @@ export function Footer() {
               </li>
               <li>Kazanchis, Palace Commercial Center</li>
               <li>3rd Floor, Office #311</li>
-              <li>P.O. Box 9885, Addis Ababa, Ethiopia</li>
+              <li>Addis Ababa, Ethiopia</li>
             </ul>
           </div>
 
