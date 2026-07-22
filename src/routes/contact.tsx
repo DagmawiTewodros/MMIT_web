@@ -113,8 +113,8 @@ function ContactPage() {
               },
               {
                 icon: Mail,
-                label: "Website",
-                value: "https://matedinstitute.com",
+                label: "Email",
+                value: "matedtcplc@gmail.com\nwogayehuwoldeyesus@gmail.com\nteddy401994@gmail.com",
               },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex gap-4">

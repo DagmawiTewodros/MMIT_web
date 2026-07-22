@@ -198,7 +198,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  .client-hover-sweep::before {
+  :root:not(.dark) .client-hover-sweep::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -209,7 +209,7 @@
     transition: transform 350ms ease;
     pointer-events: none;
   }
-  .client-hover-sweep:hover::before {
+  :root:not(.dark) .client-hover-sweep:hover::before {
     transform: scaleX(1);
   }
   .grain {
@@ -247,21 +247,21 @@
     color: #ffffff !important;
     box-shadow: 0 0 0 0.4rem rgb(255 255 255 / 10%);
   }
-
-  .dark .client-hover-sweep:hover {
-    background-color: #29364f !important;
-    border-color: oklch(0.5 0.025 255);
-    color: #ffffff !important;
-    box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
-  }
-
-  .dark .client-hover-sweep:hover :is(h3, h4, p, a) {
-    color: #ffffff !important;
-  }
 }
 
 .dark .client-hover-sweep::before {
-  background: transparent;
+  display: none !important;
+}
+
+.dark .client-hover-sweep:hover {
+  background-color: #29364f !important;
+  border-color: rgb(255 255 255 / 25%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
+}
+
+.dark .client-hover-sweep:hover :is(h3, h4, p, a) {
+  color: #ffffff !important;
 }
 
 .dark .experience-read-more:focus-visible {

@@ -24,6 +24,21 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-primary-foreground/85">
               <li>+251 97 281 8181</li>
               <li>+251 97 724 4434</li>
+              <li>
+                <a href="mailto:matedtcplc@gmail.com" className="hover:text-accent">
+                  matedtcplc@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="mailto:wogayehuwoldeyesus@gmail.com" className="hover:text-accent">
+                  wogayehuwoldeyesus@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="mailto:teddy401994@gmail.com" className="hover:text-accent">
+                  teddy401994@gmail.com
+                </a>
+              </li>
               <li>Kazanchis, Palace Commercial Center</li>
               <li>3rd Floor, Office #311</li>
               <li>P.O. Box 9885, Addis Ababa, Ethiopia</li>
