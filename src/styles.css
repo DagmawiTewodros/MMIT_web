@@ -236,6 +236,85 @@
   color: #ffffff !important;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .dark .experience-card:hover {
+    background-color: color-mix(in oklab, var(--color-card) 86%, white 14%);
+    box-shadow: 0 14px 32px rgb(0 0 0 / 35%) !important;
+    transform: translateY(-2px);
+  }
+
+  .dark .experience-read-more:hover {
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.4rem rgb(255 255 255 / 10%);
+  }
+
+  .dark .client-hover-sweep:hover {
+    background-color: #29364f !important;
+    border-color: oklch(0.5 0.025 255);
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
+  }
+
+  .dark .client-hover-sweep:hover :is(h3, h4, p, a) {
+    color: #ffffff !important;
+  }
+}
+
+.dark .client-hover-sweep::before {
+  background: transparent;
+}
+
+.dark .experience-read-more:focus-visible {
+  color: #ffffff !important;
+  outline: 2px solid rgb(255 255 255 / 65%);
+  outline-offset: 0.35rem;
+}
+
+.experience-client-scrollbar {
+  scrollbar-color: oklch(0.7 0.015 255) transparent;
+  scrollbar-width: thin;
+}
+
+.experience-client-scrollbar:hover {
+  scrollbar-color: oklch(0.58 0.02 255) transparent;
+}
+
+.experience-client-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.experience-client-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.experience-client-scrollbar::-webkit-scrollbar-thumb {
+  min-height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background-clip: content-box;
+  background-color: oklch(0.7 0.015 255);
+}
+
+.experience-client-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0.58 0.02 255);
+}
+
+.dark .experience-client-scrollbar {
+  scrollbar-color: oklch(0.52 0.025 255) transparent;
+}
+
+.dark .experience-client-scrollbar:hover {
+  scrollbar-color: oklch(0.64 0.025 255) transparent;
+}
+
+.dark .experience-client-scrollbar::-webkit-scrollbar-thumb {
+  background-color: oklch(0.52 0.025 255);
+}
+
+.dark .experience-client-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0.64 0.025 255);
+}
+
 @layer utilities {
   @keyframes marquee {
     from {

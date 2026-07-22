@@ -111,7 +111,7 @@ function ExperiencePage() {
               return (
                 <div
                   key={title}
-                  className="bg-white dark:bg-card rounded-lg p-[30px] text-center transition-all duration-300"
+                  className="experience-card bg-white dark:bg-card rounded-lg p-[30px] text-center transition-all duration-300"
                   style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.05)" }}
                 >
                   <Icon
@@ -131,7 +131,7 @@ function ExperiencePage() {
                       id={`experience-trigger-${idx}`}
                       aria-expanded={isOpen}
                       aria-controls={`experience-panel-${idx}`}
-                      className="inline-flex items-center gap-1 font-medium transition-colors"
+                      className="experience-read-more inline-flex items-center gap-1 font-medium transition-colors"
                       style={{ color: isOpen ? DARK_RED : ORANGE }}
                     >
                       {isOpen ? "Show Less" : "Read More"}
@@ -143,7 +143,7 @@ function ExperiencePage() {
                   ) : (
                     <a
                       href={link}
-                      className="font-medium transition-colors"
+                      className="experience-read-more font-medium transition-colors"
                       style={{ color: ORANGE }}
                     >
                       Read More
@@ -160,11 +160,11 @@ function ExperiencePage() {
                       <h4 className="experience-expanded-heading font-display font-semibold mb-4 text-center">
                         Selected Clients
                       </h4>
-                      <ul className="space-y-4 max-h-[420px] overflow-y-auto pr-2">
+                      <ul className="experience-client-scrollbar space-y-4 max-h-[420px] overflow-y-auto pr-2">
                         {clients.map((c, i) => (
                           <li
                             key={`${c.name}-${i}`}
-                            className="client-hover-sweep group relative flex overflow-hidden rounded-md border border-transparent px-2 py-1.5 transition-all duration-300 hover:translate-x-1 hover:border-border hover:shadow-sm"
+                            className="client-hover-sweep group relative flex overflow-hidden rounded-md border border-transparent px-2 py-1.5 transition-all duration-300 hover:translate-x-1 hover:border-border hover:shadow-sm dark:hover:border-white/25 dark:hover:bg-[#29364f] dark:hover:!text-white"
                           >
                             <ArrowRight
                               className="relative z-10 mt-0.5 h-5 w-5 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-1 group-hover:scale-110"
