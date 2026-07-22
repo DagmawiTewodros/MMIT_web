@@ -134,6 +134,44 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_album_images: {
+        Row: {
+          created_at: string
+          gallery_id: string
+          id: string
+          image_url: string
+          sort_order: number
+          storage_path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          gallery_id: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          storage_path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          gallery_id?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          storage_path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_album_images_gallery_id_fkey"
+            columns: ["gallery_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

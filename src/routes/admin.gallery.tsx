@@ -1,7 +1,19 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Upload, Pencil, Trash2, Eye, EyeOff, LogOut, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Images,
+  Pencil,
+  Trash2,
+  Eye,
+  EyeOff,
+  LogOut,
+  Plus,
+  Upload,
+  X,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 
@@ -19,7 +31,8 @@ const IMAGE_SIGN_EXPIRY = 60 * 60 * 24 * 365 * 10;
 const ALLOWED = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 5 * 1024 * 1024;
 
-type GalleryImage = {
+type AlbumImage = { id: string; storage_path: string; image_url: string; sort_order: number };
+type GalleryAlbum = {
   id: string;
   storage_path: string;
   image_url: string;
@@ -29,8 +42,8 @@ type GalleryImage = {
   sort_order: number;
   published: boolean;
   created_at: string;
+  images: AlbumImage[];
 };
-
 type EditState = {
   id?: string;
   title: string;
@@ -38,10 +51,9 @@ type EditState = {
   category: string;
   sort_order: number;
   published: boolean;
-  image_url?: string;
-  storage_path?: string;
-  file?: File | null;
-  previewUrl?: string | null;
+  images: AlbumImage[];
+  files: File[];
+  previews: string[];
 };
 
 const emptyEdit: EditState = {
@@ -50,114 +62,120 @@ const emptyEdit: EditState = {
   category: "Gallery",
   sort_order: 0,
   published: false,
-  file: null,
-  previewUrl: null,
+  images: [],
+  files: [],
+  previews: [],
 };
 
 function AdminGalleryPage() {
   const auth = useAdminAuth();
   const navigate = useNavigate();
-  const [items, setItems] = useState<GalleryImage[]>([]);
+  const [albums, setAlbums] = useState<GalleryAlbum[]>([]);
   const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState<EditState | null>(null);
   const [saving, setSaving] = useState(false);
 
   const refresh = async () => {
-    const { data, error } = await supabase
+    const { data: albumData, error: albumError } = await supabase
       .from("gallery_images")
       .select("*")
-      .order("sort_order", { ascending: true })
+      .order("sort_order")
       .order("created_at", { ascending: false });
-    if (error) return toast.error(error.message);
-    setItems((data as GalleryImage[] | null) ?? []);
+    if (albumError) return toast.error(albumError.message);
+    const ids = (albumData ?? []).map((album) => album.id);
+    const { data: imageData, error: imageError } = ids.length
+      ? await supabase
+          .from("gallery_album_images")
+          .select("*")
+          .in("gallery_id", ids)
+          .order("sort_order")
+          .order("created_at")
+      : { data: [], error: null };
+    if (imageError) return toast.error(imageError.message);
+    setAlbums(
+      (albumData ?? []).map((album) => ({
+        ...album,
+        images: (imageData ?? []).filter((image) => image.gallery_id === album.id),
+      })) as GalleryAlbum[],
+    );
   };
 
   useEffect(() => {
     if (auth.status === "admin") refresh().finally(() => setLoading(false));
   }, [auth.status]);
 
-  if (auth.status === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">
-        Loading…
-      </div>
-    );
-  }
-  if (auth.status === "unauthenticated") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-muted-foreground">You must sign in to manage the gallery.</p>
-        <Link to="/auth" className="rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium">
-          Sign in
-        </Link>
-      </div>
-    );
-  }
-  if (auth.status === "not-admin") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-muted-foreground">Your account does not have admin access.</p>
-        <Link to="/" className="text-sm underline">Back to site</Link>
-      </div>
-    );
-  }
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    navigate({ to: "/" });
+  const uploadFiles = async (files: File[]) => {
+    const uploaded: Omit<AlbumImage, "id">[] = [];
+    for (const file of files) {
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const storage_path = `${crypto.randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("gallery-images")
+        .upload(storage_path, file, { contentType: file.type, upsert: false });
+      if (uploadError) throw uploadError;
+      const { data: signed, error: signError } = await supabase.storage
+        .from("gallery-images")
+        .createSignedUrl(storage_path, IMAGE_SIGN_EXPIRY);
+      if (signError || !signed) throw signError ?? new Error("Could not prepare image");
+      uploaded.push({ storage_path, image_url: signed.signedUrl, sort_order: 0 });
+    }
+    return uploaded;
   };
 
-  const onPickFile = (f: File | null) => {
-    if (!edit) return;
-    if (!f) {
-      setEdit({ ...edit, file: null, previewUrl: edit.image_url ?? null });
-      return;
-    }
-    if (!ALLOWED.includes(f.type)) return toast.error("Only JPG, PNG or WEBP");
-    if (f.size > MAX_BYTES) return toast.error("Image must be ≤ 5MB");
-    const url = URL.createObjectURL(f);
-    setEdit({ ...edit, file: f, previewUrl: url });
+  const pickFiles = (fileList: FileList | null) => {
+    if (!edit || !fileList) return;
+    const files = Array.from(fileList);
+    if (files.some((file) => !ALLOWED.includes(file.type)))
+      return toast.error("Only JPG, PNG or WEBP images are allowed");
+    if (files.some((file) => file.size > MAX_BYTES))
+      return toast.error("Each image must be 5MB or smaller");
+    setEdit({
+      ...edit,
+      files: [...edit.files, ...files],
+      previews: [...edit.previews, ...files.map((file) => URL.createObjectURL(file))],
+    });
+  };
+
+  const updateCover = async (albumId: string, images: AlbumImage[]) => {
+    const cover = images[0];
+    if (!cover) return;
+    const { error } = await supabase
+      .from("gallery_images")
+      .update({ storage_path: cover.storage_path, image_url: cover.image_url })
+      .eq("id", albumId);
+    if (error) throw error;
   };
 
   const save = async () => {
     if (!edit) return;
+    if (!edit.id && !edit.files.length)
+      return toast.error("Add at least one image to create an album");
     setSaving(true);
     try {
-      let image_url = edit.image_url ?? "";
-      let storage_path = edit.storage_path ?? "";
-
-      if (edit.file) {
-        const ext = edit.file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-        const path = `${crypto.randomUUID()}.${ext}`;
-        const { error: upErr } = await supabase.storage
-          .from("gallery-images")
-          .upload(path, edit.file, { contentType: edit.file.type, upsert: false });
-        if (upErr) throw upErr;
-        const { data: signed, error: signErr } = await supabase.storage
-          .from("gallery-images")
-          .createSignedUrl(path, IMAGE_SIGN_EXPIRY);
-        if (signErr || !signed) throw signErr ?? new Error("Sign failed");
-        // remove old file if replacing
-        if (edit.id && edit.storage_path) {
-          await supabase.storage.from("gallery-images").remove([edit.storage_path]);
-        }
-        image_url = signed.signedUrl;
-        storage_path = path;
-      }
-
       if (!edit.id) {
-        if (!storage_path) throw new Error("Please choose an image to upload");
-        const { error } = await supabase.from("gallery_images").insert({
-          storage_path,
-          image_url,
-          title: edit.title || null,
-          description: edit.description || null,
-          category: edit.category || null,
-          sort_order: edit.sort_order,
-          published: edit.published,
-        });
-        if (error) throw error;
-        toast.success("Image added");
+        const uploaded = await uploadFiles(edit.files);
+        const cover = uploaded[0];
+        const { data: album, error: albumError } = await supabase
+          .from("gallery_images")
+          .insert({
+            storage_path: cover.storage_path,
+            image_url: cover.image_url,
+            title: edit.title || null,
+            description: edit.description || null,
+            category: edit.category || null,
+            sort_order: edit.sort_order,
+            published: edit.published,
+          })
+          .select("id")
+          .single();
+        if (albumError || !album) throw albumError ?? new Error("Could not create album");
+        const { error: imageError } = await supabase
+          .from("gallery_album_images")
+          .insert(
+            uploaded.map((image, index) => ({ ...image, gallery_id: album.id, sort_order: index })),
+          );
+        if (imageError) throw imageError;
+        toast.success("Album added");
       } else {
         const { error } = await supabase
           .from("gallery_images")
@@ -167,130 +185,253 @@ function AdminGalleryPage() {
             category: edit.category || null,
             sort_order: edit.sort_order,
             published: edit.published,
-            ...(edit.file ? { image_url, storage_path } : {}),
           })
           .eq("id", edit.id);
         if (error) throw error;
-        toast.success("Image updated");
+        if (edit.files.length) {
+          const uploaded = await uploadFiles(edit.files);
+          const { error: imageError } = await supabase.from("gallery_album_images").insert(
+            uploaded.map((image, index) => ({
+              ...image,
+              gallery_id: edit.id!,
+              sort_order: edit.images.length + index,
+            })),
+          );
+          if (imageError) throw imageError;
+        }
+        toast.success("Album updated");
       }
       setEdit(null);
       await refresh();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Save failed");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Save failed");
     } finally {
       setSaving(false);
     }
   };
 
-  const remove = async (it: GalleryImage) => {
-    if (!confirm(`Delete "${it.title ?? "image"}"?`)) return;
+  const reorderImage = async (image: AlbumImage, direction: -1 | 1) => {
+    if (!edit?.id) return;
+    const index = edit.images.findIndex((candidate) => candidate.id === image.id);
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= edit.images.length) return;
+    const images = [...edit.images];
+    [images[index], images[nextIndex]] = [images[nextIndex], images[index]];
+    const { error } = await supabase
+      .from("gallery_album_images")
+      .upsert(images.map((item, sort_order) => ({ ...item, gallery_id: edit.id!, sort_order })));
+    if (error) return toast.error(error.message);
     try {
-      if (it.storage_path) {
-        await supabase.storage.from("gallery-images").remove([it.storage_path]);
-      }
-      const { error } = await supabase.from("gallery_images").delete().eq("id", it.id);
-      if (error) throw error;
-      toast.success("Deleted");
-      refresh();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Delete failed");
+      await updateCover(edit.id, images);
+      setEdit({ ...edit, images: images.map((item, sort_order) => ({ ...item, sort_order })) });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not reorder images");
     }
   };
 
-  const togglePublish = async (it: GalleryImage) => {
-    const { error } = await supabase
-      .from("gallery_images")
-      .update({ published: !it.published })
-      .eq("id", it.id);
+  const removeAlbumImage = async (image: AlbumImage) => {
+    if (!edit?.id || edit.images.length <= 1)
+      return toast.error("An album must keep at least one image");
+    const { error } = await supabase.from("gallery_album_images").delete().eq("id", image.id);
     if (error) return toast.error(error.message);
-    toast.success(!it.published ? "Published" : "Unpublished");
+    const images = edit.images.filter((candidate) => candidate.id !== image.id);
+    try {
+      await updateCover(edit.id, images);
+      const { error: storageError } = await supabase.storage
+        .from("gallery-images")
+        .remove([image.storage_path]);
+      if (storageError) throw storageError;
+      setEdit({ ...edit, images });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Image removed, but storage cleanup failed",
+      );
+    }
+  };
+
+  const removeAlbum = async (album: GalleryAlbum) => {
+    if (!confirm(`Delete album "${album.title ?? "Untitled"}" and all of its images?`)) return;
+    const { error } = await supabase.from("gallery_images").delete().eq("id", album.id);
+    if (error) return toast.error(error.message);
+    const paths = [
+      ...new Set([...album.images.map((image) => image.storage_path), album.storage_path]),
+    ];
+    const { error: storageError } = await supabase.storage.from("gallery-images").remove(paths);
+    if (storageError) toast.error(`Album deleted, but ${storageError.message}`);
+    else toast.success("Album deleted");
     refresh();
   };
 
+  const togglePublish = async (album: GalleryAlbum) => {
+    const { error } = await supabase
+      .from("gallery_images")
+      .update({ published: !album.published })
+      .eq("id", album.id);
+    if (error) return toast.error(error.message);
+    toast.success(!album.published ? "Published" : "Unpublished");
+    refresh();
+  };
+
+  if (auth.status === "loading")
+    return (
+      <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
+        Loading…
+      </div>
+    );
+  if (auth.status === "unauthenticated")
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">You must sign in to manage the gallery.</p>
+        <Link
+          to="/auth"
+          className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground"
+        >
+          Sign in
+        </Link>
+      </div>
+    );
+  if (auth.status === "not-admin")
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">Your account does not have admin access.</p>
+        <Link to="/" className="text-sm underline">
+          Back to site
+        </Link>
+      </div>
+    );
+
   return (
     <div className="min-h-screen bg-secondary/30">
-      <header className="bg-background border-b border-border sticky top-0 z-30">
-        <div className="container-editorial h-16 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-30 border-b border-border bg-background">
+        <div className="container-editorial flex h-16 items-center justify-between gap-4">
           <Link to="/" className="font-display font-semibold tracking-tight">
-            MATED <span className="text-muted-foreground font-normal">· Admin · Gallery</span>
+            MATED <span className="font-normal text-muted-foreground">· Admin · Gallery</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Link to="/admin/messages" className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition">
+            <Link
+              to="/admin/messages"
+              className="rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted"
+            >
               Messages
             </Link>
-            <Link to="/admin/blog" className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition">
+            <Link
+              to="/admin/blog"
+              className="rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted"
+            >
               Blog
             </Link>
-            <button onClick={signOut} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition">
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                navigate({ to: "/" });
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted"
+            >
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           </div>
         </div>
       </header>
-
-      <div className="container-editorial py-10">
-        <div className="flex items-end justify-between gap-4 flex-wrap mb-8">
+      <main className="container-editorial py-10">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-display text-3xl md:text-4xl font-semibold">Gallery management</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              {items.length} total · {items.filter((i) => i.published).length} published · {items.filter((i) => !i.published).length} drafts
+            <h1 className="font-display text-3xl font-semibold md:text-4xl">Gallery management</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {albums.length} albums · {albums.filter((album) => album.published).length} published
+              · {albums.filter((album) => !album.published).length} drafts
             </p>
           </div>
           <button
-            onClick={() => setEdit({ ...emptyEdit, sort_order: (items[items.length - 1]?.sort_order ?? 0) + 1 })}
-            className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary/90 transition"
+            onClick={() =>
+              setEdit({
+                ...emptyEdit,
+                sort_order: (albums[albums.length - 1]?.sort_order ?? 0) + 1,
+              })
+            }
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
           >
-            <Upload className="h-4 w-4" /> Add image
+            <Upload className="h-4 w-4" /> Add album
           </button>
         </div>
-
         {loading ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
-        ) : items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No images yet.</p>
+        ) : albums.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No albums yet.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {items.map((it) => (
-              <div key={it.id} className="bg-background border border-border rounded-lg overflow-hidden">
-                <div className="aspect-[4/3] bg-muted relative">
-                  <img src={it.image_url} alt={it.title ?? ""} className="w-full h-full object-cover" />
-                  <span className={`absolute top-2 left-2 px-2 py-1 rounded-full text-[10px] font-medium uppercase tracking-wider ${it.published ? "bg-green-600 text-white" : "bg-amber-500 text-white"}`}>
-                    {it.published ? "Published" : "Draft"}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {albums.map((album) => (
+              <div
+                key={album.id}
+                className="overflow-hidden rounded-lg border border-border bg-background"
+              >
+                <div className="relative aspect-[4/3] bg-muted">
+                  <img
+                    src={album.images[0]?.image_url ?? album.image_url}
+                    alt={album.title ?? ""}
+                    className="h-full w-full object-cover"
+                  />
+                  <span
+                    className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-medium uppercase tracking-wider ${album.published ? "bg-green-600 text-white" : "bg-amber-500 text-white"}`}
+                  >
+                    {album.published ? "Published" : "Draft"}
+                  </span>
+                  <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[10px] text-white">
+                    <Images className="h-3 w-3" /> {album.images.length}
                   </span>
                 </div>
-                <div className="p-4 space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <h3 className="font-medium text-sm truncate">{it.title || "Untitled"}</h3>
-                      <p className="text-xs text-muted-foreground truncate">{it.category ?? "—"} · order {it.sort_order}</p>
-                    </div>
-                  </div>
-                  {it.description && <p className="text-xs text-muted-foreground line-clamp-2">{it.description}</p>}
+                <div className="space-y-2 p-4">
+                  <h3 className="truncate text-sm font-medium">{album.title || "Untitled"}</h3>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {album.category ?? "—"} · order {album.sort_order}
+                  </p>
+                  {album.description && (
+                    <p className="line-clamp-2 text-xs text-muted-foreground">
+                      {album.description}
+                    </p>
+                  )}
                   <div className="flex items-center gap-1 pt-1">
-                    <button onClick={() => togglePublish(it)} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs hover:bg-muted transition" title={it.published ? "Unpublish" : "Publish"}>
-                      {it.published ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                      {it.published ? "Unpublish" : "Publish"}
+                    <button
+                      onClick={() => togglePublish(album)}
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs transition hover:bg-muted"
+                    >
+                      {album.published ? (
+                        <EyeOff className="h-3.5 w-3.5" />
+                      ) : (
+                        <Eye className="h-3.5 w-3.5" />
+                      )}
+                      {album.published ? "Unpublish" : "Publish"}
                     </button>
                     <button
                       onClick={() =>
                         setEdit({
-                          id: it.id,
-                          title: it.title ?? "",
-                          description: it.description ?? "",
-                          category: it.category ?? "",
-                          sort_order: it.sort_order,
-                          published: it.published,
-                          image_url: it.image_url,
-                          storage_path: it.storage_path,
-                          previewUrl: it.image_url,
-                          file: null,
+                          id: album.id,
+                          title: album.title ?? "",
+                          description: album.description ?? "",
+                          category: album.category ?? "",
+                          sort_order: album.sort_order,
+                          published: album.published,
+                          images: album.images.length
+                            ? album.images
+                            : [
+                                {
+                                  id: `${album.id}-legacy`,
+                                  storage_path: album.storage_path,
+                                  image_url: album.image_url,
+                                  sort_order: 0,
+                                },
+                              ],
+                          files: [],
+                          previews: [],
                         })
                       }
-                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs hover:bg-muted transition"
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-xs transition hover:bg-muted"
                     >
                       <Pencil className="h-3.5 w-3.5" /> Edit
                     </button>
-                    <button onClick={() => remove(it)} className="inline-flex items-center gap-1 rounded-md border border-destructive/40 text-destructive px-2.5 py-1.5 text-xs hover:bg-destructive/10 transition ml-auto">
+                    <button
+                      onClick={() => removeAlbum(album)}
+                      className="ml-auto inline-flex items-center gap-1 rounded-md border border-destructive/40 px-2.5 py-1.5 text-xs text-destructive transition hover:bg-destructive/10"
+                    >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -299,79 +440,198 @@ function AdminGalleryPage() {
             ))}
           </div>
         )}
-      </div>
-
+      </main>
       {edit && (
-        <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4 overflow-y-auto" onClick={() => !saving && setEdit(null)}>
-          <div className="bg-background rounded-xl w-full max-w-2xl my-8 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-              <h2 className="font-display text-xl font-semibold">{edit.id ? "Edit image" : "Add image"}</h2>
-              <button onClick={() => !saving && setEdit(null)} className="p-1.5 rounded-md hover:bg-muted"><X className="h-4 w-4" /></button>
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/60 p-4"
+          onClick={() => !saving && setEdit(null)}
+        >
+          <div
+            className="my-8 w-full max-w-2xl rounded-xl bg-background shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-border px-6 py-4">
+              <h2 className="font-display text-xl font-semibold">
+                {edit.id ? "Edit album" : "Add album"}
+              </h2>
+              <button
+                onClick={() => !saving && setEdit(null)}
+                className="rounded-md p-1.5 hover:bg-muted"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
-
-            <div className="p-6 space-y-5">
+            <div className="space-y-5 p-6">
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wider mb-2">Image</label>
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wider">
+                  Album images
+                </label>
                 <input
                   type="file"
+                  multiple
                   accept="image/jpeg,image/png,image/webp"
-                  onChange={(e) => onPickFile(e.target.files?.[0] ?? null)}
+                  onChange={(event) => pickFiles(event.target.files)}
                   className="block w-full text-sm"
                 />
-                <p className="text-xs text-muted-foreground mt-1">JPG, PNG or WEBP · max 5MB</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Add one or more JPG, PNG, or WEBP images, up to 5MB each.
+                </p>
               </div>
-
-              {edit.previewUrl && (
+              {edit.images.length > 0 && (
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wider mb-2">Preview (as it will appear)</p>
-                  <div className="rounded-lg overflow-hidden border border-border bg-muted max-w-sm">
-                    <div className="aspect-[4/3] relative">
-                      <img src={edit.previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                        <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: "#1C2841" }}>
-                          {edit.category || "Gallery"}
-                        </p>
-                        <h3 className="font-display text-base font-semibold leading-tight">{edit.title || "Untitled"}</h3>
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wider">
+                    Current images
+                  </p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {edit.images.map((image, index) => (
+                      <div
+                        key={image.id}
+                        className="overflow-hidden rounded-lg border border-border"
+                      >
+                        <img
+                          src={image.image_url}
+                          alt={`Album image ${index + 1}`}
+                          className="aspect-[4/3] w-full object-cover"
+                        />
+                        <div className="flex items-center justify-between p-2">
+                          <span className="text-xs text-muted-foreground">
+                            {index === 0 ? "Cover" : `Image ${index + 1}`}
+                          </span>
+                          <div className="flex">
+                            <button
+                              disabled={index === 0}
+                              onClick={() => reorderImage(image, -1)}
+                              className="rounded p-1 hover:bg-muted disabled:opacity-30"
+                              aria-label="Move image earlier"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              disabled={index === edit.images.length - 1}
+                              onClick={() => reorderImage(image, 1)}
+                              className="rounded p-1 hover:bg-muted disabled:opacity-30"
+                              aria-label="Move image later"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" />
+                            </button>
+                            <button
+                              onClick={() => removeAlbumImage(image)}
+                              className="rounded p-1 text-destructive hover:bg-destructive/10"
+                              aria-label="Remove image"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}
-
+              {edit.previews.length > 0 && (
+                <div>
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wider">Images to add</p>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {edit.previews.map((preview, index) => (
+                      <div
+                        key={preview}
+                        className="relative overflow-hidden rounded-lg border border-border"
+                      >
+                        <img
+                          src={preview}
+                          alt={`New image ${index + 1}`}
+                          className="aspect-[4/3] w-full object-cover"
+                        />
+                        <button
+                          onClick={() =>
+                            setEdit({
+                              ...edit,
+                              files: edit.files.filter((_, fileIndex) => fileIndex !== index),
+                              previews: edit.previews.filter(
+                                (_, previewIndex) => previewIndex !== index,
+                              ),
+                            })
+                          }
+                          className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white"
+                          aria-label="Remove pending image"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wider mb-2">Caption / Title</label>
-                <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wider">
+                  Caption / Title
+                </label>
+                <input
+                  value={edit.title}
+                  onChange={(event) => setEdit({ ...edit, title: event.target.value })}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                />
               </div>
-
               <div>
-                <label className="block text-xs font-medium uppercase tracking-wider mb-2">Description (optional)</label>
-                <textarea value={edit.description} onChange={(e) => setEdit({ ...edit, description: e.target.value })} rows={3} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wider">
+                  Description (optional)
+                </label>
+                <textarea
+                  value={edit.description}
+                  onChange={(event) => setEdit({ ...edit, description: event.target.value })}
+                  rows={3}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                />
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium uppercase tracking-wider mb-2">Category</label>
-                  <input value={edit.category} onChange={(e) => setEdit({ ...edit, category: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wider">
+                    Category
+                  </label>
+                  <input
+                    value={edit.category}
+                    onChange={(event) => setEdit({ ...edit, category: event.target.value })}
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium uppercase tracking-wider mb-2">Display order</label>
-                  <input type="number" value={edit.sort_order} onChange={(e) => setEdit({ ...edit, sort_order: Number(e.target.value) || 0 })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wider">
+                    Display order
+                  </label>
+                  <input
+                    type="number"
+                    value={edit.sort_order}
+                    onChange={(event) =>
+                      setEdit({ ...edit, sort_order: Number(event.target.value) || 0 })
+                    }
+                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                  />
                 </div>
               </div>
-
               <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={edit.published} onChange={(e) => setEdit({ ...edit, published: e.target.checked })} />
+                <input
+                  type="checkbox"
+                  checked={edit.published}
+                  onChange={(event) => setEdit({ ...edit, published: event.target.checked })}
+                />{" "}
                 Published (visible on public gallery)
               </label>
             </div>
-
-            <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-border">
-              <button onClick={() => setEdit(null)} disabled={saving} className="rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-muted transition disabled:opacity-60">
+            <div className="flex items-center justify-end gap-2 border-t border-border px-6 py-4">
+              <button
+                onClick={() => setEdit(null)}
+                disabled={saving}
+                className="rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted disabled:opacity-60"
+              >
                 Cancel
               </button>
-              <button onClick={save} disabled={saving} className="rounded-full bg-primary text-primary-foreground px-5 py-2 text-xs font-medium hover:bg-primary/90 transition disabled:opacity-60">
-                {saving ? "Saving…" : edit.id ? "Save changes" : "Add image"}
+              <button
+                onClick={save}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-xs font-medium text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                {saving ? "Saving…" : edit.id ? "Save changes" : "Create album"}
               </button>
             </div>
           </div>
